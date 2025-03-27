@@ -1,3 +1,8 @@
+# Ignorar entornos virtuales
+env_providers/
+.env/
+.virtualenv/
+
 # Virtual enviroment
 app_initial.py
 
