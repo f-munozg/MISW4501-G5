@@ -44,3 +44,7 @@ class Portfolio_Rule(db.Model):
 
     portfolio_id = Column(UUID(as_uuid=True), ForeignKey('portfolio.id'), nullable=False)
     rule_id = Column(UUID(as_uuid=True), ForeignKey('rules.id'), nullable=False)
+
+    __table_args__ = (
+        db.PrimaryKeyConstraint('portfolio_id', 'rule_id'),
+    )
