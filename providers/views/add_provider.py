@@ -25,7 +25,7 @@ class AddProvider(Resource):
             db.session.commit()
         except IntegrityError:
             return {
-                "message": "provider is already blacklisted"
+                "message": "provider is already registered"
             }, 409
 
         return {
