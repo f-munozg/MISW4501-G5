@@ -1,0 +1,42 @@
+steps:
+
+ # Build docker image
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/proyectofinal1-455100/github.com/f-munozg/${_CONTAINER_IMAGE}', '-f', '${_DOCKERFILE_PATH}', '.']
+
+ # Push image to artifact registry
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/proyectofinal1-455100/github.com/f-munozg/${_CONTAINER_IMAGE}:latest']
+ 
+
+ # Create the new instance template
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: create-instance-template
+  args:
+    - compute
+    - instance-templates
+    - create-with-container
+    - ${_SERVICE_NAME}-instance-template-$_ENV-$SHORT_SHA
+    - --machine-type=e2-small
+    - --boot-disk-size=10GB
+    - --boot-disk-type=pd-balanced
+    - --boot-disk-device-name=${_SERVICE_NAME}-instance-template
+    - --tags=web,http-server,https-server
+    - --region=us-central1
+    - --service-account=${_SERVICE_ACCOUNT}
+    - --network-interface=no-address
+    - --container-image
+    - gcr.io/proyectofinal1-455100/github.com/f-munozg/${_CONTAINER_IMAGE}:latest
+  env:
+   - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+ # Update the managed instance group
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: ['-c','gcloud compute instance-groups managed rolling-action start-update ${_SERVICE_NAME}-instance-group --version=template=${_SERVICE_NAME}-instance-template-$_ENV-$SHORT_SHA --zone=${_SERVICE_ZONE} --max-unavailable=0'] 
+  
+options:
+ logging: CLOUD_LOGGING_ONLY
