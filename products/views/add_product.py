@@ -9,6 +9,18 @@ class AddProduct(Resource):
     def post(self):
         data = request.json
 
+        required_fields = [
+            "sku", "name", "unit_value", "conditions_storage",
+            "product_features", "provider_id", "time_delivery_dear", "photo", "description"
+        ]
+
+        # Verificar si algún campo obligatorio falta
+        missing_fields = [field for field in required_fields if field not in data or not data[field]]
+        if missing_fields:
+            return {
+                "message": f"Missing required fields: {', '.join(missing_fields)}"
+            }, 400
+
         product = Product (
             sku = data.get("sku"),
             name = data.get("name"),
