@@ -1,6 +1,10 @@
 name: Test_Coverage
 on:
-  push:
+  pull_request:
+    types: 
+      - opened
+      - reopened
+      - syncronize
     branches: 
       - develop
       - main
@@ -14,15 +18,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./customers
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./customers
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./customers
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./customers
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_orders:
     runs-on: ubuntu-latest
     strategy:
@@ -32,15 +39,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./orders
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./orders
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./orders
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./orders
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_products:
     runs-on: ubuntu-latest
     strategy:
@@ -50,15 +60,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./products
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./products
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./products
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./products
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_providers:
     runs-on: ubuntu-latest
     strategy:
@@ -68,15 +81,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./providers
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./providers
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./providers
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./providers
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_reports:
     runs-on: ubuntu-latest
     strategy:
@@ -86,15 +102,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./reports
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./reports
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./reports
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./reports
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_routes:
     runs-on: ubuntu-latest
     strategy:
@@ -104,15 +123,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./routes
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./routes
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./routes
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./routes
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_sales:
     runs-on: ubuntu-latest
     strategy:
@@ -122,15 +144,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./sales
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./sales
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./sales
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./sales
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_sellers:
     runs-on: ubuntu-latest
     strategy:
@@ -140,15 +165,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./sellers
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./sellers
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./sellers
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./sellers
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_stock:
     runs-on: ubuntu-latest
     strategy:
@@ -158,15 +186,18 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./stock
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./stock
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./stock
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./stock
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
   test_users:
     runs-on: ubuntu-latest
     strategy:
@@ -176,12 +207,16 @@ jobs:
       - uses: actions/checkout@v1
       - name: Save test variable to env variable
         run: echo "IS_UNIT_TEST=1" >> $GITHUB_ENV
-      - name: Install pipenv
+      - name: Init virtual environment
         working-directory: ./users
-        run: pip install pipenv
+        run: python -m venv ./venv
+      - name: Enable environment
+        working-directory: ./users
+        run: source ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./users
-        run: pipenv install --dev
+        run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./users
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80
+  
