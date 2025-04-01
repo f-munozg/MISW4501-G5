@@ -1,6 +1,9 @@
 name: Test_Coverage
 on:
-  push:
+  pull_request:
+    types: 
+      - opened
+      - reopened
     branches: 
       - develop
       - main
