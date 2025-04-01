@@ -18,7 +18,7 @@ jobs:
         run: ls -lR .
       - name: enable environment
         working-directory: ./customers
-        run: ./venv/Scripts/activate
+        run: ./venv/bin/activate
       - name: Install dependencies
         working-directory: ./customers
         run: pip install -r requirements.txt
