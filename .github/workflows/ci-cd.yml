@@ -15,7 +15,7 @@ jobs:
         run: python -m venv ./venv
       - name: enable environment
         working-directory: ./customers
-        run: .venv/Scripts/activate
+        run: ./venv/Scripts/activate
       - name: Install dependencies
         working-directory: ./customers
         run: pip install -r requirements.txt
