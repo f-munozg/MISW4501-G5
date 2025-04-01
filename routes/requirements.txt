@@ -10,3 +10,5 @@ marshmallow-sqlalchemy==0.25.0
 SQLAlchemy==1.4.15
 psycopg2-binary
 werkzeug==2.2.2
+pytest
+pytest-cov
