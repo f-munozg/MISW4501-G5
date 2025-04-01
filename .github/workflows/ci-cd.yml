@@ -13,6 +13,9 @@ jobs:
       - name: Install pipenv
         working-directory: ./customers
         run: python -m venv ./venv
+      - name: check environment
+        working-directory: ./customers
+        run: ls -lR .
       - name: enable environment
         working-directory: ./customers
         run: ./venv/Scripts/activate
