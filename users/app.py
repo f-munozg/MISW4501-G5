@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_restful import Api
-from models.models import db
 from views.health_check import HealthCheck
 
 import os
