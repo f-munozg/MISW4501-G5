@@ -1,5 +1,6 @@
 # Ignorar entornos virtuales
 env_providers/
+env_products/
 .env/
 .virtualenv/
 
