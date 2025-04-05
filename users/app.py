@@ -39,10 +39,11 @@ def init_db(app):
 def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/users/ping")
-    api.add_resource(CreateUser, "/user")
-    api.add_resource(LoginUser, "/login")
-    api.add_resource(GetRoles, "/roles")
+    api.add_resource(CreateUser, "/users/user")
+    api.add_resource(LoginUser, "/users/login")
+    api.add_resource(GetRoles, "/users/roles")
 
 if __name__ == "__main__":
     application = create_app()
-    application.run(host='0.0.0.0', port='5000')
+    port = int(os.environ.get('PORT', 5000))
+    application.run(host='0.0.0.0', port=port)

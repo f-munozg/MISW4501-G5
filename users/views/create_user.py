@@ -10,7 +10,7 @@ class CreateUser(Resource):
         data = request.json
 
         required_fields = [
-            "identification_number", "name", "password", "email", "role"
+            "username", "password", "email", "role"
         ]
 
         missing_fields = [field for field in required_fields if field not in data or not data[field]]
@@ -19,9 +19,6 @@ class CreateUser(Resource):
                 "message": f"Missing required fields: {', '.join(missing_fields)}"
             }, 400
         
-        if not isinstance(data["identification_number"], str) or not data["identification_number"].isdigit():
-            return {"message": "Invalid 'identification_number'. Must be a numeric string."}, 400
-
         try:
             uuid.UUID(data["role"])
         except: 
@@ -31,8 +28,7 @@ class CreateUser(Resource):
         pwd = hashlib.sha256(passwordToHash.encode()).hexdigest()
         
         newUser = User(
-            identification_number = data.get("identification_number"),
-            name = data.get("name"),
+            username = data.get("username"),
             password = pwd,
             email = data.get("email"),
             role = data.get("role")
@@ -48,5 +44,6 @@ class CreateUser(Resource):
 
         
         return {
-            "message": "user created successfully"
+            "message": "user created successfully",
+            "id": str(newUser.id)
         }, 201
