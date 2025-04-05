@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from marshmallow import Schema, fields
 from sqlalchemy import Column, String, Integer, ForeignKey, Enum, Float
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
 import uuid, enum
@@ -45,3 +46,13 @@ class Role_Privilege(db.Model):
     __table_args__ = (
         db.PrimaryKeyConstraint('role_id', 'privilege_id'),
     )
+
+class RoleJsonSchema(Schema):
+    id = fields.UUID() 
+    name = fields.Str()
+
+class PrivilegeJsonSchema(Schema):
+    name = fields.Str()
+    module  = fields.Str()
+    module_attribute  = fields.Str()
+    access_type  = fields.Str()

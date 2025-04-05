@@ -42,7 +42,7 @@ insert into privileges (id, name, module, module_attribute, access_type) values
 
 
 insert into role_privilege (role_id, privilege_id) values
-
+('cc4a4702-3d00-4a1f-9474-d8ff331485a7', )
 
 perfil ventas
 productos, vendedor, reportes

@@ -4,6 +4,8 @@ from flask_jwt_extended import JWTManager
 from models.models import db
 from views.health_check import HealthCheck
 from views.create_user import CreateUser
+from views.login import LoginUser
+from views.get_roles import GetRoles
 
 import os
 
@@ -38,6 +40,8 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/users/ping")
     api.add_resource(CreateUser, "/user")
+    api.add_resource(LoginUser, "/login")
+    api.add_resource(GetRoles, "/roles")
 
 if __name__ == "__main__":
     application = create_app()
