@@ -10,7 +10,7 @@ class CreateUserTestCase(unittest.TestCase):
         os.environ["TESTING"] = "true"
         app = Flask(__name__)
         api = Api(app)
-        api.add_resource(CreateUser, '/user')
+        api.add_resource(CreateUser, '/users/user')
         self.app = app.test_client()  
         self.app.testing = True 
 
@@ -19,10 +19,9 @@ class CreateUserTestCase(unittest.TestCase):
         mock_db_session.add = MagicMock()
         mock_db_session.commit = MagicMock()
 
-        response = self.app.post('/user',
+        response = self.app.post('/users/user',
             data=json.dumps({
-                "identification_number": "123321123",
-                "name": "John Doe",
+                "username": "username",
                 "password": "password123",
                 "email": "mail@mail.com",
                 "role": "cc4a4702-3d00-4a1f-9474-d8ff331485a7"
@@ -32,15 +31,14 @@ class CreateUserTestCase(unittest.TestCase):
         
         self.assertEqual(response.status_code, 201)
         
-        self.assertEqual(response.data.decode(), '{"message": "user created successfully"}\n')
+        self.assertEqual(response.data.decode(), '{"message": "user created successfully", "id": "None"}\n')
 
 
     def test_create_user_with_missing_fields(self):
         
-        response = self.app.post('/user',
+        response = self.app.post('/users/user',
             data=json.dumps({
-                "identification_number": "123321123",
-                "name": "John Doe",
+                "username": "username",
             }),
             content_type="application/json"
         )
@@ -49,32 +47,12 @@ class CreateUserTestCase(unittest.TestCase):
         
         self.assertEqual(response.data.decode(), '{"message": "Missing required fields: ' \
         'password, email, role"}\n')
-
-
-    def test_create_user_invalid_identification_number(self):
-        
-        response = self.app.post('/user',
-            data=json.dumps({
-                "identification_number": "ABCDEF",
-                "name": "John Doe",
-                "password": "password123",
-                "email": "mail@mail.com",
-                "role": "cc4a4702-3d00-4a1f-9474-d8ff331485a7"
-            }),
-            content_type="application/json"
-        )
-        
-        self.assertEqual(response.status_code, 400)
-        
-        self.assertEqual(response.data.decode(), '{"message": "Invalid \'identification_number\'.' \
-        ' Must be a numeric string."}\n')
         
     def test_create_user_invalid_role_id(self):
         
-        response = self.app.post('/user',
+        response = self.app.post('/users/user',
             data=json.dumps({
-                "identification_number": "123321123",
-                "name": "John Doe",
+                "username": "username",
                 "password": "password123",
                 "email": "mail@mail.com",
                 "role": "Admin"
@@ -91,10 +69,9 @@ class CreateUserTestCase(unittest.TestCase):
         mock_db_session.add = MagicMock()
         mock_db_session.commit.side_effect = IntegrityError("test", "test", "test")
 
-        response = self.app.post('/user',
+        response = self.app.post('/users/user',
             data=json.dumps({
-                "identification_number": "123321123",
-                "name": "John Doe",
+                "username": "username",
                 "password": "password123",
                 "email": "mail@mail.com",
                 "role": "cc4a4702-3d00-4a1f-9474-d8ff331485a7"
@@ -107,7 +84,3 @@ class CreateUserTestCase(unittest.TestCase):
         self.assertEqual(response.data.decode(), '{"message": "user is already registered"}\n')
 
 
-
-
-if __name__ == '__main__':
-    unittest.main()

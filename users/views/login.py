@@ -10,7 +10,7 @@ class LoginUser(Resource):
         data = request.json
 
         required_fields = [
-            "email", "password"
+            "username", "password"
         ]
 
         missing_fields = [field for field in required_fields if field not in data or not data[field]]
@@ -20,11 +20,11 @@ class LoginUser(Resource):
             }, 400
         
 
-        storedUser = db.session.query(User).filter_by(email=data.get("email")).first()
+        storedUser = db.session.query(User).filter_by(username=data.get("username")).first()
 
         if not storedUser:
             return {
-                "message": "invalid email or password"
+                "message": "invalid username or password"
             }, 401
 
 
@@ -33,7 +33,7 @@ class LoginUser(Resource):
         
         if pwd != storedUser.password:
             return {
-                "message": "invalid email or password"
+                "message": "invalid username or password"
             }, 401
         
         role = db.session.query(Role).filter_by(id=storedUser.role).first()
@@ -51,6 +51,7 @@ class LoginUser(Resource):
         return {
             "message": "login successful",
             "role": role.name,
-            "privileges": jsonPrivileges
+            "privileges": jsonPrivileges,
+            "user_id": str(storedUser.id)
         
         }, 200
