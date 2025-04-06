@@ -1,10 +1,11 @@
-import unittest
+import unittest, os
 from flask import Flask
 from flask_restful import Api
 from app import create_app 
 
 class AppTestCase(unittest.TestCase):
     def setUp(self):
+        os.environ["TESTING"] = "true"
         self.app = create_app().test_client()
         self.app.testing = True 
 
