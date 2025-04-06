@@ -12,7 +12,7 @@ class AddProduct(Resource):
         data = request.json
 
         required_fields = [
-            "sku", "name", "unit_value", "conditions_storage",
+            "sku", "name", "unit_value", "storage_conditions",
             "product_features", "provider_id", "category"
         ]
 
@@ -44,21 +44,21 @@ class AddProduct(Resource):
             return {"message": "provider_id must be a valid UUID"}, 400
 
         # Parsear fecha opcional
-        time_delivery_dear = None
-        if data.get("time_delivery_dear"):
+        estimated_delivery_time = None
+        if data.get("estimated_delivery_time"):
             try:
-                time_delivery_dear = datetime.fromisoformat(data["time_delivery_dear"])
+                estimated_delivery_time = datetime.fromisoformat(data["estimated_delivery_time"])
             except ValueError:
-                return {"message": "Invalid format for 'time_delivery_dear'. Use ISO format (YYYY-MM-DDTHH:MM:SS)."}, 400
+                return {"message": "Invalid format for 'estimated_delivery_time'. Use ISO format (YYYY-MM-DDTHH:MM:SS)."}, 400
 
         product = Product(
             sku=data["sku"],
             name=data["name"],
             unit_value=unit_value,
-            conditions_storage=data["conditions_storage"],
+            storage_conditions=data["storage_conditions"],
             product_features=data["product_features"],
             provider_id=provider_id,
-            time_delivery_dear=time_delivery_dear,
+            estimated_delivery_time=estimated_delivery_time,
             photo=data.get("photo"),
             description=data.get("description"),
             category=category

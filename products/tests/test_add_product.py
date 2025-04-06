@@ -38,10 +38,10 @@ class TestAddProduct(unittest.TestCase):
                 "sku": "ABC123",
                 "name": "Producto de ejemplo",
                 "unit_value": 19.99,
-                "conditions_storage": "Almacenar en un lugar seco",
+                "storage_conditions": "Almacenar en un lugar seco",
                 "product_features": "Resistente al agua",
                 "provider_id": "debedacc-3e31-4003-8986-871637d727af",
-                "time_delivery_dear": "2025-04-01",
+                "estimated_delivery_time": "2025-04-01",
                 "photo": "iVBORw0KGgoAAAANSUhEUgAAA+gAAAPoC...",
                 "description": "Este es un producto de prueba.",
                 "category": "Alimentación"
@@ -69,10 +69,10 @@ class TestAddProduct(unittest.TestCase):
                 "sku": "ABC123",
                 "name": "Producto de ejemplo",
                 "unit_value": 19.99,
-                "conditions_storage": "Almacenar en un lugar seco",
+                "storage_conditions": "Almacenar en un lugar seco",
                 "product_features": "Resistente al agua",
                 "provider_id": "debedacc-3e31-4003-8986-871637d727af",
-                "time_delivery_dear": "2025-04-01",
+                "estimated_delivery_time": "2025-04-01",
                 "photo": "iVBORw0KGgoAAAANSUhEUgAAA+gAAAPoC...",
                 "description": "Este es un producto de prueba.",
                 "category": "Alimentación"
@@ -114,7 +114,7 @@ class TestAddProduct(unittest.TestCase):
                 "sku": "ABC123",
                 "name": "Producto inválido",
                 "unit_value": "no-es-float",
-                "conditions_storage": "Lugar fresco",
+                "storage_conditions": "Lugar fresco",
                 "product_features": "Resistente",
                 "provider_id": "debedacc-3e31-4003-8986-871637d727af",
                 "category": "FARMACIA"
@@ -132,7 +132,7 @@ class TestAddProduct(unittest.TestCase):
                 "sku": "XYZ999",
                 "name": "Producto categoría inválida",
                 "unit_value": 50.0,
-                "conditions_storage": "Seco",
+                "storage_conditions": "Seco",
                 "product_features": "Compacto",
                 "provider_id": "debedacc-3e31-4003-8986-871637d727af",
                 "category": "ZAPATOS"
@@ -150,7 +150,7 @@ class TestAddProduct(unittest.TestCase):
                 "sku": "XYZ999",
                 "name": "Producto UUID inválido",
                 "unit_value": 50.0,
-                "conditions_storage": "Seco",
+                "storage_conditions": "Seco",
                 "product_features": "Compacto",
                 "provider_id": "no-es-un-uuid",
                 "category": "FARMACIA"
@@ -168,16 +168,16 @@ class TestAddProduct(unittest.TestCase):
                 "sku": "XYZ888",
                 "name": "Producto fecha inválida",
                 "unit_value": 50.0,
-                "conditions_storage": "Seco",
+                "storage_conditions": "Seco",
                 "product_features": "Compacto",
                 "provider_id": "debedacc-3e31-4003-8986-871637d727af",
                 "category": "FARMACIA",
-                "time_delivery_dear": "fecha-mala"
+                "estimated_delivery_time": "fecha-mala"
             }),
             content_type="application/json"
         )
         self.assertEqual(response.status_code, 400)
-        self.assertIn("Invalid format for 'time_delivery_dear'", response.json["message"])
+        self.assertIn("Invalid format for 'estimated_delivery_time'", response.json["message"])
 
 if __name__ == "__main__":
     unittest.main()
