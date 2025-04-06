@@ -29,7 +29,8 @@ class CreateOrder(Resource):
         
         
         url_users = os.environ.get("CUSTOMERS_URL", "http://localhost:5001")
-        url = f"{url_users}/customers/{data.get("user_id")}"
+        user_id = data.get("user_id")
+        url = f"{url_users}/customers/{user_id}"
         headers = {} #"Authorization": self.token}
         response = requests.request("GET", url, headers=headers)
 
