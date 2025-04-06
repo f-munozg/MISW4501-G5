@@ -58,5 +58,5 @@ class OrderProducts(db.Model):
 class SalesJsonSchema(Schema):
     id = fields.UUID()
     name = fields.Str()
-    quantity = fields.Float()
+    total_quantity = fields.Float()
     unit_value = fields.Float()
