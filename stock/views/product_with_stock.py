@@ -18,7 +18,8 @@ class ProductWithStock(Resource):
             Product.category.label("category"),
             Product.estimated_delivery_time,
             Stock.quantity,
-            Stock.date_update
+            Stock.date_update,
+            Product.unit_value
         ).join(
             Stock, Stock.product_id == Product.id
         ).filter(
@@ -36,7 +37,8 @@ class ProductWithStock(Resource):
                 "category": row.category.value if row.category else None,
                 "quantity": row.quantity,
                 "estimated_delivery_time": row.estimated_delivery_time.isoformat() if row.estimated_delivery_time else None,
-                "date_update": row.date_update.isoformat() if row.date_update else None
+                "date_update": row.date_update.isoformat() if row.date_update else None,
+                "unit_value": row.unit_value
             }
             for row in results
         ]
