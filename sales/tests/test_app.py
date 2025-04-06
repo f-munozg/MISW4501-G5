@@ -2,9 +2,11 @@ import unittest
 from flask import Flask
 from flask_restful import Api
 from app import create_app 
+import os
 
 class AppTestCase(unittest.TestCase):
     def setUp(self):
+        os.environ["TESTING"] = "true"
         self.app = create_app().test_client()
         self.app.testing = True 
 
@@ -14,6 +16,3 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
         self.assertEqual(response.data.decode(), '"pong"\n')
-
-if __name__ == '__main__':
-    unittest.main()
