@@ -43,13 +43,14 @@ class TestAddProduct(unittest.TestCase):
                 "provider_id": "debedacc-3e31-4003-8986-871637d727af",
                 "time_delivery_dear": "2025-04-01",
                 "photo": "iVBORw0KGgoAAAANSUhEUgAAA+gAAAPoC...",
-                "description": "Este es un producto de prueba."
+                "description": "Este es un producto de prueba.",
+                "category": "Alimentación"
             }),
             content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json["message"], "product created successfully")
+        self.assertEqual(response.json["message"], "Product created successfully")
         mock_db_session.add.assert_called_once()
         mock_db_session.commit.assert_called_once()
 
@@ -73,13 +74,14 @@ class TestAddProduct(unittest.TestCase):
                 "provider_id": "debedacc-3e31-4003-8986-871637d727af",
                 "time_delivery_dear": "2025-04-01",
                 "photo": "iVBORw0KGgoAAAANSUhEUgAAA+gAAAPoC...",
-                "description": "Este es un producto de prueba."
+                "description": "Este es un producto de prueba.",
+                "category": "Alimentación"
             }),
             content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 409)
-        self.assertEqual(response.json["message"], "product is already registered")
+        self.assertEqual(response.json["message"], "Product is already registered")
         mock_db_session.add.assert_called_once()
         mock_db_session.commit.assert_called_once()
 
@@ -102,6 +104,80 @@ class TestAddProduct(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+        self.assertIn("Missing required fields", response.json["message"])
+
+    def test_create_product_invalid_unit_value(self):
+        """Prueba cuando 'unit_value' no es un float válido."""
+        response = self.client.post(
+            "/products/add",
+            data=json.dumps({
+                "sku": "ABC123",
+                "name": "Producto inválido",
+                "unit_value": "no-es-float",
+                "conditions_storage": "Lugar fresco",
+                "product_features": "Resistente",
+                "provider_id": "debedacc-3e31-4003-8986-871637d727af",
+                "category": "FARMACIA"
+            }),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("unit_value must be a valid float", response.json["message"])
+
+    def test_create_product_invalid_category(self):
+        """Prueba cuando la categoría no es válida."""
+        response = self.client.post(
+            "/products/add",
+            data=json.dumps({
+                "sku": "XYZ999",
+                "name": "Producto categoría inválida",
+                "unit_value": 50.0,
+                "conditions_storage": "Seco",
+                "product_features": "Compacto",
+                "provider_id": "debedacc-3e31-4003-8986-871637d727af",
+                "category": "ZAPATOS"
+            }),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("Invalid category", response.json["message"])
+
+    def test_create_product_invalid_uuid(self):
+        """Prueba cuando el UUID del proveedor no es válido."""
+        response = self.client.post(
+            "/products/add",
+            data=json.dumps({
+                "sku": "XYZ999",
+                "name": "Producto UUID inválido",
+                "unit_value": 50.0,
+                "conditions_storage": "Seco",
+                "product_features": "Compacto",
+                "provider_id": "no-es-un-uuid",
+                "category": "FARMACIA"
+            }),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("provider_id must be a valid UUID", response.json["message"])
+
+    def test_create_product_invalid_date(self):
+        """Prueba cuando la fecha tiene un formato incorrecto."""
+        response = self.client.post(
+            "/products/add",
+            data=json.dumps({
+                "sku": "XYZ888",
+                "name": "Producto fecha inválida",
+                "unit_value": 50.0,
+                "conditions_storage": "Seco",
+                "product_features": "Compacto",
+                "provider_id": "debedacc-3e31-4003-8986-871637d727af",
+                "category": "FARMACIA",
+                "time_delivery_dear": "fecha-mala"
+            }),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("Invalid format for 'time_delivery_dear'", response.json["message"])
 
 if __name__ == "__main__":
     unittest.main()
