@@ -28,7 +28,7 @@ class TestStockyQuery(unittest.TestCase):
     #             warehouse_name="Bodega Central",
     #             product_name="Arroz",
     #             category=MagicMock(value="ALIMENTACION"),
-    #             time_delivery_dear=None,
+    #             estimated_delivery_time=None,
     #             date_update=None,
     #             quantity=100
     #         )
