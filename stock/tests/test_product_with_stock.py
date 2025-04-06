@@ -35,7 +35,8 @@ class TestProductsWithStock(unittest.TestCase):
                 category=ProductCategory.FARMACIA,
                 estimated_delivery_time=datetime(2024, 4, 2, 12, 0, 0),
                 quantity=5,
-                date_update=datetime(2024, 4, 1, 15, 0, 0)
+                date_update=datetime(2024, 4, 1, 15, 0, 0),
+                unit_value=10.000
             )
         ]
 
@@ -65,7 +66,8 @@ class TestProductsWithStock(unittest.TestCase):
                 category=ProductCategory.ELECTRÓNICA,
                 estimated_delivery_time=None,
                 quantity=10,
-                date_update=None
+                date_update=None,
+                unit_value=10.000
             )
         ]
 
