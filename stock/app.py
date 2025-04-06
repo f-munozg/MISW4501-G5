@@ -3,6 +3,7 @@ from flask_restful import Api
 from views.health_check import HealthCheck
 from views.stock_query import StockyQuery
 from views.product_stock_location import ProductStockLocation
+from views.product_with_stock import ProductWithStock
 from models.models import db
 
 import os
@@ -33,6 +34,7 @@ def add_routes(application):
     api.add_resource(HealthCheck, "/stock/ping")
     api.add_resource(StockyQuery, "/stock/query")
     api.add_resource(ProductStockLocation, "/stock/product_location")
+    api.add_resource(ProductWithStock, "/stock/get")
 
 def init_db(app):
     db.init_app(app)
