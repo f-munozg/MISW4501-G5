@@ -1,4 +1,5 @@
 import unittest
+import os
 from unittest.mock import patch, MagicMock
 from flask import json
 from app import create_app
@@ -7,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 class TestAddSeller(unittest.TestCase):
     def setUp(self):
+        os.environ["TESTING"] = "true"
         self.app = create_app()
         self.app.testing = True
         self.client = self.app.test_client()
