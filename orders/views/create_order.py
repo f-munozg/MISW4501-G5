@@ -10,7 +10,7 @@ class CreateOrder(Resource):
         data = request.json
 
         required_fields = [
-            "products", "user_id"
+            "user_id", "order_id"
         ]
 
         missing_fields = [field for field in required_fields if field not in data or not data[field]]
@@ -24,9 +24,10 @@ class CreateOrder(Resource):
         except: 
             return {"message": "invalid user id"}, 400
         
-        if len(data.get("products")) == 0:
-            return {"message": "empty product list"}, 400
-        
+        try:
+            uuid.UUID(data["order_id"])
+        except: 
+            return {"message": "invalid order id"}, 400
         
         url_users = os.environ.get("CUSTOMERS_URL", "http://localhost:5001")
         user_id = data.get("user_id")
@@ -38,33 +39,22 @@ class CreateOrder(Resource):
             return response.json(), response.status_code
 
         customer_id = response.json()["customer"]["id"]
-        seller_id = data.get("seller_id")
         
-        order = Order(
-            customer_id = customer_id,
-            seller_id = seller_id,
-            date_order = datetime.today(),
-            date_delivery = datetime.today(),
-            status = "created"
-        )
+        order_id = data.get("order_id")
+
+        order = db.session.query(Order).filter_by(customer_id=customer_id, id = order_id, status="reserved").first()
+
+        if not order:
+            return { "message": "invalid reserve to activate"}, 400
+        
+        order.status = "created"
 
         try:
-            db.session.add(order)
             db.session.commit()
         except IntegrityError:
             return {
                 "message": "order is already registered"
             }, 409
-
-        for product in data.get("products"):
-            orderProduct = OrderProducts(
-                order_id = str(order.id),
-                product_id = product["id"],
-                quantity = product["quantity"]
-            )
-            db.session.add(orderProduct)
-        
-        db.session.commit()
 
         return {
             "message": "order created successfully",
