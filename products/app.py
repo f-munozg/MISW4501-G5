@@ -2,6 +2,8 @@ from flask import Flask
 from flask_restful import Api
 from views.health_check import HealthCheck
 from views.add_product import AddProduct
+from views.get_products import GetProducts
+from views.get_provider_products import GetProviderProducts
 from models.models import db
 import os
 
@@ -9,10 +11,10 @@ def create_app():
     application = Flask(__name__)
 
     host = os.environ.get('DB_HOST', 'localhost')
-    port = os.environ.get('DB_PORT', '5432')
-    dbName = os.environ.get('DB_NAME', 'gcp_db')
+    port = os.environ.get('DB_PORT', '9432')
+    dbName = os.environ.get('DB_NAME', 'maindb')
     username = os.environ.get('DB_USERNAME', 'postgres')
-    password = os.environ.get('DB_PASSWORD', 'Password123!')
+    password = os.environ.get('DB_PASSWORD', 'password')
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -30,6 +32,8 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/products/ping")
     api.add_resource(AddProduct, "/products/add")
+    api.add_resource(GetProducts, "/products")
+    api.add_resource(GetProviderProducts, "/products/provider/<provider_id>")
 
 def init_db(app):
     db.init_app(app)

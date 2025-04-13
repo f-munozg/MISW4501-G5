@@ -4,6 +4,10 @@ from flask_jwt_extended import JWTManager
 from models.models import db
 from views.health_check import HealthCheck
 from views.create_order import CreateOrder
+from views.create_reserve import CreateReserve
+from views.get_customer_orders import GetCustomerOrders
+from views.get_order import GetOrder
+from views.get_orders import GetOrders
 import os
 
 def create_app():
@@ -36,7 +40,11 @@ def init_db(app):
 def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/orders/ping")
+    api.add_resource(GetCustomerOrders, "/orders/user/<user_id>")
+    api.add_resource(GetOrders, "/orders")
+    api.add_resource(GetOrder, "/orders/<order_id>")
     api.add_resource(CreateOrder, "/orders/order")
+    api.add_resource(CreateReserve, "/orders/reserve")
 
 if __name__ == "__main__":
     application = create_app()

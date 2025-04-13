@@ -178,6 +178,3 @@ class TestAddProduct(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertIn("Invalid format for 'estimated_delivery_time'", response.json["message"])
-
-if __name__ == "__main__":
-    unittest.main()

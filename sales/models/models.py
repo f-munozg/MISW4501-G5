@@ -39,7 +39,7 @@ class Order(db.Model):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     customer_id = Column(UUID(as_uuid=True), nullable=False)
-    seller_id = Column(UUID(as_uuid=True), nullable=False)
+    seller_id = Column(UUID(as_uuid=True))
     date_order = Column(DateTime)
     date_delivery = Column(DateTime)
     status = Column(String(50), nullable=False)
