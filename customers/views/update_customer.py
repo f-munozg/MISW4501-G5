@@ -45,6 +45,8 @@ class UpdateCustomer(Resource):
                 "message": "store not found"
             }, 500
         
+        user.email = data.get("email")
+        
         customer.name = data.get("name")
         customer.identification_number = data.get('identification_number')
         
@@ -55,6 +57,7 @@ class UpdateCustomer(Resource):
         db.session.commit()
 
         jsonCustomer = CustomerJsonSchema().dump(customer)
+        jsonCustomer["email"] = user.email
         jsonStore = StoreJsonSchema().dump(store)
 
         return {
