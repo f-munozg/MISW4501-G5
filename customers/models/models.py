@@ -50,6 +50,7 @@ class CustomerJsonSchema(Schema):
     assigned_seller  = fields.UUID()
     observations  = fields.Str()
     user_id = fields.UUID()
+    email = fields.Str()
 
 class StoreJsonSchema(Schema):
     id = fields.UUID()

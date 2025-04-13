@@ -60,3 +60,11 @@ class SalesJsonSchema(Schema):
     name = fields.Str()
     total_quantity = fields.Float()
     unit_value = fields.Float()
+
+class OrderJsonSchema(Schema):
+    id = fields.UUID()
+    customer_id = fields.UUID()
+    seller_id = fields.UUID()
+    date_order = fields.DateTime()
+    date_delivery = fields.DateTime()
+    status = fields.Str()
