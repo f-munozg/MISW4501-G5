@@ -6,6 +6,7 @@ from views.health_check import HealthCheck
 from views.create_order import CreateOrder
 from views.create_reserve import CreateReserve
 from views.get_customer_orders import GetCustomerOrders
+from views.get_order import GetOrder
 from views.get_orders import GetOrders
 import os
 
@@ -39,8 +40,9 @@ def init_db(app):
 def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/orders/ping")
-    api.add_resource(GetCustomerOrders, "/orders/<user_id>")
+    api.add_resource(GetCustomerOrders, "/orders/user/<user_id>")
     api.add_resource(GetOrders, "/orders")
+    api.add_resource(GetOrder, "/orders/<order_id>")
     api.add_resource(CreateOrder, "/orders/order")
     api.add_resource(CreateReserve, "/orders/reserve")
 
