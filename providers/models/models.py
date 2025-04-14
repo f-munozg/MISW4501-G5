@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from marshmallow import Schema, fields
 from sqlalchemy import Column, String, Integer, ForeignKey, Enum, Float
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
 import uuid
@@ -48,3 +49,14 @@ class Portfolio_Rule(db.Model):
     __table_args__ = (
         db.PrimaryKeyConstraint('portfolio_id', 'rule_id'),
     )
+
+class ProviderJsonSchema(Schema):
+    id = fields.UUID()
+    identification_number = fields.Str()
+    name = fields.Str()
+    address = fields.Str()
+    countries = fields.List(fields.Str())
+    identification_number_contact = fields.Str()
+    name_contact = fields.Str()
+    phone_contact = fields.Str()
+    address_contact = fields.Str()

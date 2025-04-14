@@ -1,3 +1,6 @@
+-- psql -U postgres
+-- \c maindb
+
 insert into roles (id, name) values (gen_random_uuid(), 'Administrador'), (gen_random_uuid(), 'Logistica'), (gen_random_uuid(), 'Compras'),  (gen_random_uuid(), 'Ventas'), (gen_random_uuid(), 'Cliente'), (gen_random_uuid(), 'Vendedor');
 
 insert into privileges (id, name, module, module_attribute, access_type) values
@@ -41,88 +44,7 @@ insert into privileges (id, name, module, module_attribute, access_type) values
 (gen_random_uuid(), 'Tiendas', 'Vendedor', 'read', 'ALLOW'); -- 038
 
 
-insert into role_privilege (role_id, privilege_id) values
-('cc4a4702-3d00-4a1f-9474-d8ff331485a7', )
-
-perfil ventas
-productos, vendedor, reportes
--> 009
--> 010
--> 011
--> 012
--> 021
--> 022
-
-perfil Compras
-productos, fabricantes, reportes, inventario, ventas, compras, reglas
--> 001
--> 002
--> 003
--> 004
--> 005
--> 006
--> 007
--> 008
--> 011
--> 012
--> 013
--> 014
--> 015
--> 016
-
-perfil logistica
-inventario, generacion ruta, optimizacion compras, rastreo, optimizacion entrega, trazabilidad pedidos
--> 001
--> 015
--> 017
--> 018
--> 019
--> 020
-
-perfil administrador
-gestion productos, gestion fabricantes, gestion vendedores, gestion reportes, gestion pedidos, gestion bodegas e inventarios, gestion ventas, gestion compras, gestion usuarios, gestion rutas, gestion reglas
--> 001
--> 002
--> 003
--> 004
--> 005
--> 006
--> 007
--> 008
--> 009
--> 010
--> 011
--> 012
--> 013
--> 014
--> 015
--> 016
--> 017
--> 018
--> 019
--> 020
--> 021
--> 022
--> 023
--> 024
--> 025
--> 026
--> 027
--> 028
--> 029
--> 030
-
-perfil Cliente
--> 031
--> 032
--> 033
--> 034
-
-
-perfil vendedor
--> 031
--> 032
--> 035
--> 036
--> 037
--> 038
+-- Asignar todos los permisos al rol admin
+insert into role_privilege (privilege_id, role_id)
+select id, {{id_rol_admin}}
+from privileges;

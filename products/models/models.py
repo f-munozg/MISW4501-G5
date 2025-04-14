@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, ForeignKey, Text, Float, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Enum as SQLAlchemyEnum
+from marshmallow import Schema, fields
 import uuid
 import enum
 
@@ -32,3 +33,16 @@ class Product(db.Model):
     photo = Column(Text)
     description = Column(String(255))
     category = Column(SQLAlchemyEnum(ProductCategory), nullable=False)
+
+class ProductJsonSchema(Schema):
+    id = fields.UUID()
+    sku = fields.Str()
+    name = fields.Str()
+    unit_value = fields.Float()
+    storage_conditions = fields.Str()
+    product_features = fields.Str()
+    provider_id = fields.UUID()
+    estimated_delivery_time = fields.DateTime()
+    photo = fields.Str()
+    description = fields.Str()
+    category = fields.Enum(ProductCategory)
