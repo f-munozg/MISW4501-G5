@@ -45,5 +45,5 @@ def add_routes(application):
 
 if __name__ == "__main__":
     application = create_app()
-    port = int(os.environ.get('APP_PORT', 5000))
+    port = int(os.environ.get('APP_PORT', 5010))
     application.run(host='0.0.0.0', port=port)
