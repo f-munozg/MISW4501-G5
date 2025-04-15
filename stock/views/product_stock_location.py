@@ -6,7 +6,7 @@ from sqlalchemy import or_, and_
 
 class ProductStockLocation(Resource):
     def get(self):
-        search = request.args.get("search", default=None)
+        search = request.args.get("product", default=None)
         warehouse_id = request.args.get("warehouse_id", default=None)
         
         if not search and not warehouse_id:
