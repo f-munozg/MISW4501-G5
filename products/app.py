@@ -4,6 +4,7 @@ from views.health_check import HealthCheck
 from views.add_product import AddProduct
 from views.get_products import GetProducts
 from views.get_provider_products import GetProviderProducts
+from views.add_file_product import FileUploadProducts
 from models.models import db
 import os
 
@@ -33,6 +34,7 @@ def add_routes(application):
     api.add_resource(HealthCheck, "/products/ping")
     api.add_resource(AddProduct, "/products/add")
     api.add_resource(GetProducts, "/products")
+    api.add_resource(FileUploadProducts, "/products/upload")
     api.add_resource(GetProviderProducts, "/products/provider/<provider_id>")
 
 def init_db(app):
