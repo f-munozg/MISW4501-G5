@@ -36,7 +36,7 @@ def add_routes(application):
     api.add_resource(HealthCheck, "/providers/ping")
     api.add_resource(AddProvider, "/providers/add")
     api.add_resource(GetProvider, "/providers/<provider_id>")
-    api.add_resource(GetProviders, "/providers/get")
+    api.add_resource(GetProviders, "/providers")
 
 def init_db(app):
     db.init_app(app)
