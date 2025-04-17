@@ -3,6 +3,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from models.models import db
 from views.get_sales import GetSales
+from views.definition_sales_plan import DefinitionSalesPlan
 from views.health_check import HealthCheck
 import os
 
@@ -38,6 +39,7 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/sales/ping")
     api.add_resource(GetSales, "/sales")
+    api.add_resource(DefinitionSalesPlan, "/sales-plans/add")
 
 if __name__ == "__main__":
     application = create_app()

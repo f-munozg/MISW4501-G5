@@ -1,7 +1,10 @@
 # Ignorar entornos virtuales
+env_customers/
 env_providers/
 env_products/
 env_sellers/
+env_order/
+env_sales/
 env_users/
 env_stock/
 .env/

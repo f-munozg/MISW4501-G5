@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, ForeignKey, Text, Float, DateTime
+from sqlalchemy import Column, String, ForeignKey, Text, Float, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Enum as SQLAlchemyEnum
 from marshmallow import Schema, fields
@@ -18,6 +18,11 @@ class ProductCategory(enum.Enum):
     BELLEZA = "Belleza"
     JUGUETE = "Juguete"
     HOGAR = "Hogar"
+
+class PlanPeriod(enum.Enum):
+    TRIMESTRAL = "Trimestral"
+    SEMESTRAL = "Semestral"
+    ANUAL = "Anual"
 
 class Product(db.Model):
     __tablename__ = "products"
@@ -54,6 +59,16 @@ class OrderProducts(db.Model):
     __table_args__ = (
         db.PrimaryKeyConstraint('order_id', 'product_id'),
     )
+
+class SalesPlan(db.Model):
+    __tablename__ = "sales_plan"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    seller_id = Column(UUID(as_uuid=True))
+    target = Column(String(50), nullable=False)
+    product_id = Column(UUID(as_uuid=True), ForeignKey('products.id'), nullable=False)
+    period = Column(SQLAlchemyEnum(PlanPeriod), nullable=False)
+    active = Column(Boolean, default=True, nullable=False)
 
 class SalesJsonSchema(Schema):
     id = fields.UUID()
