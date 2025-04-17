@@ -12,3 +12,6 @@ psycopg2-binary
 werkzeug==2.2.2
 pytest
 pytest-cov
+pandas
+XlsxWriter>=3.0.0
+openpyxl
