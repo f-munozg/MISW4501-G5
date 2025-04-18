@@ -1,7 +1,7 @@
 import uuid, hashlib
 from flask import request
 from datetime import date
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, cast, Date
 from sqlalchemy.orm import aliased
 from models.models import db, Order, OrderProducts, Product, SalesJsonSchema
 from flask_restful import Resource
@@ -31,7 +31,8 @@ class GetSales(Resource):
             Product.id,
             Product.name,
             func.sum(OrderProducts.quantity).label('total_quantity'),
-            Product.unit_value
+            Product.unit_value,
+            cast(Order.date_order, Date).label('purchase_date')
         ).join(
             OrderProducts, OrderProducts.product_id == Product.id
         ).join(
@@ -39,7 +40,7 @@ class GetSales(Resource):
         ).filter(
             *query
         ).group_by(
-            Product.id, Product.name, Product.unit_value
+            Product.id, Product.name, Product.unit_value, cast(Order.date_order, Date)
         )
 
         products = query.all()
@@ -53,8 +54,6 @@ class GetSales(Resource):
             many = True,
         ).dump(products)
 
-        print('products:', products)
-        print('json_products:', jsonProducts)
         return jsonProducts, 200
 
 

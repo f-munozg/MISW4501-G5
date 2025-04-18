@@ -40,13 +40,9 @@ class LoginUser(Resource):
 
         privileges = db.session.query(Privilege).join(Role_Privilege, Privilege.id == Role_Privilege.privilege_id, isouter=True).filter_by(role_id= role.id).all()
 
-        print('privileges:', privileges)
-
         jsonPrivileges = PrivilegeJsonSchema(
             many = True,
         ).dump(privileges)
-
-        print('json privileges:', jsonPrivileges)
 
         return {
             "message": "login successful",

@@ -4,7 +4,9 @@ from views.health_check import HealthCheck
 from views.create_customer import CreateCustomer
 from views.get_customer import GetCustomer
 from views.get_customers import GetCustomers
+from views.get_available_customers import GetAvailableCustomers
 from views.update_customer import UpdateCustomer
+from views.assign_seller import AssignSeller
 from models.models import db
 
 import os
@@ -42,7 +44,9 @@ def add_routes(application):
     api.add_resource(CreateCustomer, "/customers/customer") # POST
     api.add_resource(GetCustomer, "/customers/<user_id>") # GET
     api.add_resource(GetCustomers, "/customers") # GET
+    api.add_resource(GetAvailableCustomers, "/customers/available") # GET
     api.add_resource(UpdateCustomer, "/customers/<user_id>") # PUT
+    api.add_resource(AssignSeller, "/customers/assign_seller") # POST
 
 if __name__ == "__main__":
     application = create_app()

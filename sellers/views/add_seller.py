@@ -63,5 +63,24 @@ class AddSeller(Resource):
         except IntegrityError:
             db.session.rollback()
             return {"message": "Seller is already registered"}, 409
+        
+
+        if data.get("customers"):
+            customers = data.get("customers")
+
+            body = {
+                "customers": customers,
+                "seller_id": str(seller.id)
+            }
+
+            url_customers = os.environ.get("CUSTOMERS_URL", "http://localhost:5001")
+            url = f"{url_customers}/customers/assign_seller"
+            headers = {} # "Authorization": self.token}
+            response = requests.request("POST", url, headers=headers, json=body)
+            
+            if response.status_code != 200:
+                return response.json(), response.status_code
+            
+        
 
         return {"message": "Seller created successfully"}, 201

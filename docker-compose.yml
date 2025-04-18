@@ -158,6 +158,7 @@ services:
       DB_NAME: maindb
       APP_PORT: 5000
       USERS_URL: http://users:5000
+      CUSTOMERS_URL: http://customers:5000
     networks:
       - ccp_net
     depends_on:
