@@ -21,7 +21,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./customers
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_orders:
     runs-on: ubuntu-latest
     strategy:
@@ -42,7 +42,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./orders
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_products:
     runs-on: ubuntu-latest
     strategy:
@@ -63,7 +63,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./products
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_providers:
     runs-on: ubuntu-latest
     strategy:
@@ -84,7 +84,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./providers
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_reports:
     runs-on: ubuntu-latest
     strategy:
@@ -105,7 +105,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./reports
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_routes:
     runs-on: ubuntu-latest
     strategy:
@@ -126,7 +126,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./routes
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_sales:
     runs-on: ubuntu-latest
     strategy:
@@ -147,7 +147,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./sales
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_sellers:
     runs-on: ubuntu-latest
     strategy:
@@ -168,7 +168,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./sellers
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_stock:
     runs-on: ubuntu-latest
     strategy:
@@ -189,7 +189,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./stock
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   test_users:
     runs-on: ubuntu-latest
     strategy:
@@ -210,5 +210,5 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run unit tests
         working-directory: ./users
-        run: pytest --cov=. -v -s --cov-fail-under=80
+        run: pytest --cov=. -v -s --cov-fail-under=80 --disable-warnings
   

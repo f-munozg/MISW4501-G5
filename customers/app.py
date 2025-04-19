@@ -5,23 +5,29 @@ from views.create_customer import CreateCustomer
 from views.get_customer import GetCustomer
 from views.get_customers import GetCustomers
 from views.update_customer import UpdateCustomer
+from views.assign_seller import AssignSeller
 from models.models import db
 
-import os
+import os, uuid
 
 def create_app():
     application = Flask(__name__)
 
+    # host = os.environ.get('DB_HOST', 'localhost')
+    # port = os.environ.get('DB_PORT', '9432')
+    # dbName = os.environ.get('DB_NAME', 'maindb')
+    # username = os.environ.get('DB_USERNAME', 'postgres')
+    # password = os.environ.get('DB_PASSWORD', 'password')
+
     host = os.environ.get('DB_HOST', 'localhost')
-    port = os.environ.get('DB_PORT', '9432')
-    dbName = os.environ.get('DB_NAME', 'maindb')
+    port = os.environ.get('DB_PORT', '5432')
+    dbName = os.environ.get('DB_NAME', 'gcp_db')
     username = os.environ.get('DB_USERNAME', 'postgres')
-    password = os.environ.get('DB_PASSWORD', 'password')
+    password = os.environ.get('DB_PASSWORD', 'Password123!')
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    application.config["JWT_SECRET_KEY"] = "frase-secreta"
-    application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+    application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
 
     if not os.environ.get('TESTING'):
         init_db(application)
@@ -43,6 +49,7 @@ def add_routes(application):
     api.add_resource(GetCustomer, "/customers/<user_id>") # GET
     api.add_resource(GetCustomers, "/customers") # GET
     api.add_resource(UpdateCustomer, "/customers/<user_id>") # PUT
+    api.add_resource(AssignSeller, "/customers/assign_seller") # POST
 
 if __name__ == "__main__":
     application = create_app()

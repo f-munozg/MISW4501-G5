@@ -1,3 +1,4 @@
+import uuid, os
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
@@ -7,8 +8,6 @@ from views.create_user import CreateUser
 from views.login import LoginUser
 from views.get_roles import GetRoles
 from views.get_users_movements import GetUsersMovements
-
-import os
 
 def create_app():
     application = Flask(__name__)
@@ -27,8 +26,7 @@ def create_app():
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    application.config["JWT_SECRET_KEY"] = "frase-secreta"
-    application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+    application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
 
     if not os.environ.get('TESTING'):
         init_db(application)
@@ -53,5 +51,5 @@ def add_routes(application):
 
 if __name__ == "__main__":
     application = create_app()
-    port = int(os.environ.get('APP_PORT', 5000))
+    port = int(os.environ.get('APP_PORT', 5010))
     application.run(host='0.0.0.0', port=port)
