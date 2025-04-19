@@ -7,7 +7,7 @@ from views.product_with_stock import ProductWithStock
 from views.stock_movements import StockMovement
 from models.models import db
 
-import os
+import os, uuid
 
 def create_app():
     application = Flask(__name__)
@@ -26,7 +26,7 @@ def create_app():
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    application.config["JWT_SECRET_KEY"] = "frase-secreta"
+    application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
     application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
 
     if not os.environ.get('TESTING'):

@@ -6,7 +6,7 @@ from views.get_seller import GetSeller
 from views.get_sellers import GetSellers
 from models.models import db
 
-import os
+import os, uuid
 
 def create_app():
     application = Flask(__name__)
@@ -19,8 +19,7 @@ def create_app():
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    application.config["JWT_SECRET_KEY"] = "frase-secreta"
-    application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+    application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
 
     if not os.environ.get('TESTING'):
         init_db(application)
@@ -33,7 +32,7 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/sellers/ping")
     api.add_resource(AddSeller, "/sellers/add")
-    api.add_resource(GetSeller, "/sellers/<seller_id>")
+    api.add_resource(GetSeller, "/sellers/seller")
     api.add_resource(GetSellers, "/sellers")
 
 def init_db(app):

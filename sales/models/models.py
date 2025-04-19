@@ -24,6 +24,22 @@ class PlanPeriod(enum.Enum):
     SEMESTRAL = "Semestral"
     ANUAL = "Anual"
 
+class StoreZone(enum.Enum):
+    NORTE = "NORTE"
+    SUR = "SUR"
+    ORIENTE = "ORIENTE"
+    OCCIDENTE = "OCCIDENTE"
+
+
+class VisitStatus(enum.Enum):
+    REALIZADA = "Realizada"
+    NO_REALIZADA = "No Realizada"
+
+class VisitResult(enum.Enum):
+    PEDIDO = "Pedido"
+    RESERVA = "Reserva"
+
+
 class Product(db.Model):
     __tablename__ = "products"
 
@@ -69,6 +85,21 @@ class SalesPlan(db.Model):
     product_id = Column(UUID(as_uuid=True), ForeignKey('products.id'), nullable=False)
     period = Column(SQLAlchemyEnum(PlanPeriod), nullable=False)
     active = Column(Boolean, default=True, nullable=False)
+
+
+class Visit(db.Model):
+    __tablename__ = "visit"
+
+    id = db.Column(db.Integer, primary_key=True)
+    seller_id = Column(UUID(as_uuid=True), nullable=False)
+    customer_id = Column(UUID(as_uuid=True), nullable=False)
+    store_address = Column(String(50), nullable=False)
+    zone = Column(SQLAlchemyEnum(StoreZone), nullable=False)
+    visit_status = Column(SQLAlchemyEnum(VisitStatus), nullable=False)
+    visit_result = Column(SQLAlchemyEnum(VisitResult), nullable=True)
+    observations = Column(String(200), nullable=False)
+    
+
 
 class SalesJsonSchema(Schema):
     id = fields.UUID()
