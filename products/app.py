@@ -4,8 +4,9 @@ from views.health_check import HealthCheck
 from views.add_product import AddProduct
 from views.get_products import GetProducts
 from views.get_provider_products import GetProviderProducts
+from views.add_file_product import FileUploadProducts
 from models.models import db
-import os
+import os, uuid
 
 def create_app():
     application = Flask(__name__)
@@ -18,8 +19,7 @@ def create_app():
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    application.config["JWT_SECRET_KEY"] = "frase-secreta"
-    application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+    application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
 
     if not os.environ.get('TESTING'):
         init_db(application)
@@ -33,6 +33,7 @@ def add_routes(application):
     api.add_resource(HealthCheck, "/products/ping")
     api.add_resource(AddProduct, "/products/add")
     api.add_resource(GetProducts, "/products")
+    api.add_resource(FileUploadProducts, "/products/upload")
     api.add_resource(GetProviderProducts, "/products/provider/<provider_id>")
 
 def init_db(app):

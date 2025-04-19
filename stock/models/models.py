@@ -20,6 +20,10 @@ class ProductCategory(enum.Enum):
     JUGUETE = "Juguete"
     HOGAR = "Hogar"
 
+class StockMovementType(enum.Enum):
+    INGRESO = "INGRESO"
+    SALIDA = "SALIDA"
+
 class Product(db.Model):
     __tablename__ = "products"
 
@@ -55,6 +59,20 @@ class Stock(db.Model):
     product = db.relationship("Product", back_populates="stock")
     warehouse = db.relationship("Warehouse", back_populates="stock")
 
+class HistoryStockLog(db.Model):
+    __tablename__ = "history_stock_log"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"), nullable=False)
+    warehouse_id = Column(UUID(as_uuid=True), ForeignKey("warehouse.id"), nullable=False)
+    quantity = Column(Integer, nullable=False)
+    user = Column(String(200), nullable=False)
+    movement_type = Column(SQLAlchemyEnum(StockMovementType), nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
+    alert_message = Column(String(300), nullable=True)
+
+    product = db.relationship("Product")
+    warehouse = db.relationship("Warehouse")
 
 class Warehouse(db.Model):
     __tablename__ = "warehouse"

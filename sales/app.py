@@ -3,8 +3,10 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from models.models import db
 from views.get_sales import GetSales
+from views.definition_sales_plan import DefinitionSalesPlan
 from views.health_check import HealthCheck
-import os
+from views.log_visit import LogVisit
+import os, uuid
 
 def create_app():
     application = Flask(__name__)
@@ -17,8 +19,7 @@ def create_app():
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    application.config["JWT_SECRET_KEY"] = "frase-secreta"
-    application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+    application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
 
     if not os.environ.get('TESTING'):
         init_db(application)
@@ -38,6 +39,8 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/sales/ping")
     api.add_resource(GetSales, "/sales")
+    api.add_resource(DefinitionSalesPlan, "/sales-plans/add")
+    api.add_resource(LogVisit, "/sales/log-visit")
 
 if __name__ == "__main__":
     application = create_app()
