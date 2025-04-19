@@ -5,6 +5,7 @@ from models.models import db
 from views.get_sales import GetSales
 from views.definition_sales_plan import DefinitionSalesPlan
 from views.health_check import HealthCheck
+from views.log_visit import LogVisit
 import os
 
 def create_app():
@@ -40,6 +41,7 @@ def add_routes(application):
     api.add_resource(HealthCheck, "/sales/ping")
     api.add_resource(GetSales, "/sales")
     api.add_resource(DefinitionSalesPlan, "/sales-plans/add")
+    api.add_resource(LogVisit, "/sales/log-visit")
 
 if __name__ == "__main__":
     application = create_app()

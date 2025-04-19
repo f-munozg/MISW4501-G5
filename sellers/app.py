@@ -33,7 +33,7 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/sellers/ping")
     api.add_resource(AddSeller, "/sellers/add")
-    api.add_resource(GetSeller, "/sellers/<seller_id>")
+    api.add_resource(GetSeller, "/sellers/seller")
     api.add_resource(GetSellers, "/sellers")
 
 def init_db(app):

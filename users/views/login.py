@@ -3,6 +3,7 @@ from datetime import datetime
 from models.models import db, User, Role, Privilege, Role_Privilege, PrivilegeJsonSchema
 from flask import request
 from flask_restful import Resource
+from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import IntegrityError
 
 class LoginUser(Resource):
@@ -44,10 +45,13 @@ class LoginUser(Resource):
             many = True,
         ).dump(privileges)
 
+        access_token = create_access_token(identity=str(storedUser.id))
+
         return {
             "message": "login successful",
             "role": role.name,
             "privileges": jsonPrivileges,
-            "user_id": str(storedUser.id)
+            "user_id": str(storedUser.id),
+            "access_token": access_token
         
         }, 200

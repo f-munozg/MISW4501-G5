@@ -26,7 +26,6 @@ class GetSales(Resource):
         if initial_date and final_date and initial_date != "" and final_date != "" and validate_date(initial_date) and validate_date(final_date):
             query.append(and_(Order.date_order <= final_date, Order.date_order >= initial_date))
 
-        #products = db.session.query(Product, Order).join(OrderProducts, Product.id == OrderProducts.product_id).join(Order, Order.id == OrderProducts.order_id).all()
         query = db.session.query(
             Product.id,
             Product.name,
