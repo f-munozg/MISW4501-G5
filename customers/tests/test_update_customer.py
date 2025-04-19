@@ -35,7 +35,7 @@ class UpdateCustomerTestCase(unittest.TestCase):
         
         self.assertEqual(response.status_code, 202)
 
-    def test_update_customer(self):
+    def test_update_customer_missing_fields(self):
         response = self.app.put(
             '/customer/9ebec3c3-3406-498b-be8e-c87a24774c55',
             data=json.dumps({

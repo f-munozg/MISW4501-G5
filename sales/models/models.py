@@ -75,3 +75,4 @@ class SalesJsonSchema(Schema):
     name = fields.Str()
     total_quantity = fields.Float()
     unit_value = fields.Float()
+    purchase_date = fields.Str()
