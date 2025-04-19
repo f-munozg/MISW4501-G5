@@ -55,12 +55,6 @@ class OrderProducts(db.Model):
         db.PrimaryKeyConstraint('order_id', 'product_id'),
     )
 
-class SalesJsonSchema(Schema):
-    id = fields.UUID()
-    name = fields.Str()
-    total_quantity = fields.Float()
-    unit_value = fields.Float()
-
 class OrderJsonSchema(Schema):
     id = fields.UUID()
     customer_id = fields.UUID()

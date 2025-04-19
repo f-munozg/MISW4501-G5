@@ -88,6 +88,8 @@ class SalesPlan(db.Model):
 
 
 class Visit(db.Model):
+    __tablename__ = "visit"
+
     id = db.Column(db.Integer, primary_key=True)
     seller_id = Column(UUID(as_uuid=True), nullable=False)
     customer_id = Column(UUID(as_uuid=True), nullable=False)
