@@ -55,3 +55,7 @@ class PrivilegeJsonSchema(Schema):
     module  = fields.Str()
     module_attribute  = fields.Str()
     access_type  = fields.Str()
+
+class UsersJsonSchema(Schema):
+    id = fields.UUID() 
+    username = fields.Str()

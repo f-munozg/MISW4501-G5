@@ -56,8 +56,12 @@ class StockMovement(Resource):
                     db.session.commit()
                     return {"message": alert}, 409
                 stock_record.quantity -= quantity
+                if stock_record.quantity < stock_record.threshold_stock:
+                    stock_record.critical_level = True
             else:
                 stock_record.quantity += quantity
+                if stock_record.quantity >= stock_record.threshold_stock:
+                    stock_record.critical_level = False
         else:
             if movement_type == "SALIDA":
                 return {"message": "No stock record found. Cannot perform SALIDA."}, 404
