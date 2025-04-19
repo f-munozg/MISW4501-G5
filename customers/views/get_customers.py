@@ -18,7 +18,7 @@ class GetCustomers(Resource):
             except: 
                 return {"message": "invalid user id"}, 400
         
-            url_sellers = os.environ.get("SELLERS_ID", "http://localhost:4002")
+            url_sellers = os.environ.get("SELLERS_URL", "http://localhost:4002")
             url = f"{url_sellers}/sellers/seller?user_id={seller_user_id}"
             headers = {} #"Authorization": self.token}
             response = requests.request("GET", url, headers=headers)

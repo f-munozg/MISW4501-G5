@@ -20,7 +20,6 @@ def create_app():
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
-    application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
 
     if not os.environ.get('TESTING'):
         init_db(application)
