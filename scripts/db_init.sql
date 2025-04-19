@@ -43,8 +43,7 @@ insert into privileges (id, name, module, module_attribute, access_type) values
 (gen_random_uuid(), 'PQRS', 'Vendedor', 'read', 'ALLOW'), -- 037
 (gen_random_uuid(), 'Tiendas', 'Vendedor', 'read', 'ALLOW'); -- 038
 
+insert into warehouse (id,name,address,country,city,location,storage_volume,available_volume,truck_capacity) values (gen_random_uuid(), 'Bodega principal', 'Calle 80', 'Colombia', 'Bogota', '-37.4885502, -72.3302756', 500, 500, 5);
 
 -- Asignar todos los permisos al rol admin
-insert into role_privilege (privilege_id, role_id)
-select id, {{id_rol_admin}}
-from privileges;
+insert into role_privilege (privilege_id, role_id) select id, {{id_rol_admin}} from privileges;

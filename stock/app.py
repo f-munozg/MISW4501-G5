@@ -4,6 +4,7 @@ from views.health_check import HealthCheck
 from views.stock_query import StockyQuery
 from views.product_stock_location import ProductStockLocation
 from views.product_with_stock import ProductWithStock
+from views.get_warehouses import GetWarehouses
 from views.stock_movements import StockMovement
 from models.models import db
 
@@ -41,6 +42,7 @@ def add_routes(application):
     api.add_resource(HealthCheck, "/stock/ping")
     api.add_resource(StockyQuery, "/stock/query")
     api.add_resource(ProductStockLocation, "/stock/product_location")
+    api.add_resource(GetWarehouses, "/stock/get_warehouses")
     api.add_resource(ProductWithStock, "/stock/get")
     api.add_resource(StockMovement, "/stock/movement")
 

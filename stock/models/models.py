@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from marshmallow import Schema, fields
 from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, Text, Float, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Enum as SQLAlchemyEnum
@@ -87,3 +88,7 @@ class Warehouse(db.Model):
     truck_capacity = Column(Integer, nullable=False)
 
     stock = db.relationship("Stock", back_populates="warehouse")
+
+class WarehouseJsonSchema(Schema):
+    id = fields.UUID()
+    name = fields.Str()

@@ -28,7 +28,7 @@ class CreateCustomer(Resource):
             "role": str(role.id)
         }
 
-        url_users = os.environ.get("USERS_URL", "http://localhost:5000")
+        url_users = os.environ.get("USERS_URL", "http://localhost:5010")
         url = f"{url_users}/users/user"
         headers = {} #"Authorization": self.token}
         body = user_creation

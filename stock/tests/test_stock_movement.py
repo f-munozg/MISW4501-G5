@@ -24,6 +24,7 @@ class TestStockMovement(unittest.TestCase):
         mock_query = MagicMock()
         mock_stock = MagicMock()
         mock_stock.quantity = 10
+        mock_stock.threshold_stock = 0
         mock_query.return_value.filter_by.return_value.first.return_value = mock_stock
 
         mock_session.query.return_value = mock_query.return_value

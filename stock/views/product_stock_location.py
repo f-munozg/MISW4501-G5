@@ -6,11 +6,11 @@ from sqlalchemy import or_, and_
 
 class ProductStockLocation(Resource):
     def get(self):
-        search = request.args.get("search", default=None)
+        product = request.args.get("product", default=None)
         warehouse_id = request.args.get("warehouse_id", default=None)
         
-        if not search and not warehouse_id:
-            return {"error": "Debe enviar al menos 'search' o 'warehouse_id'."}, 400
+        if not product and not warehouse_id:
+            return {"error": "Debe enviar al menos 'product' o 'warehouse_id'."}, 400
 
         try:
             limit = int(request.args.get("limit", 10))
@@ -23,11 +23,11 @@ class ProductStockLocation(Resource):
         if warehouse_id:
             filters.append(Stock.warehouse_id == warehouse_id)
         
-        if search:
+        if product:
             filters.append(
                 or_(
-                    Product.name.ilike(f"%{search}%"),
-                    Product.sku.ilike(f"%{search}%")
+                    Product.name.ilike(f"%{product}%"),
+                    Product.sku.ilike(f"%{product}%")
                 )
             )
 
