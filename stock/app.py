@@ -6,6 +6,8 @@ from views.product_stock_location import ProductStockLocation
 from views.product_with_stock import ProductWithStock
 from views.get_warehouses import GetWarehouses
 from views.stock_movements import StockMovement
+from views.stock_release import StockRelease
+from views.stock_reserve import StockReserve
 from models.models import db
 
 import os, uuid
@@ -45,6 +47,8 @@ def add_routes(application):
     api.add_resource(GetWarehouses, "/stock/get_warehouses")
     api.add_resource(ProductWithStock, "/stock/get")
     api.add_resource(StockMovement, "/stock/movement")
+    api.add_resource(StockReserve, "/stock/reserve")
+    api.add_resource(StockRelease, "/stock/release")
 
 def init_db(app):
     db.init_app(app)
