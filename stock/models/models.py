@@ -49,6 +49,7 @@ class Stock(db.Model):
     product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"), nullable=False)
     warehouse_id = Column(UUID(as_uuid=True), ForeignKey("warehouse.id"), nullable=False)
     quantity = Column(Integer, nullable=False)
+    reserved_quantity = Column(Integer, nullable=False, default=0)
     threshold_stock = Column(Integer, nullable=False)
     critical_level = Column(Boolean, nullable=False)
     date_update = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

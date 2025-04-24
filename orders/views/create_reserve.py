@@ -4,6 +4,8 @@ from models.models import db, Order, OrderProducts
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
+from utils import call_stock_service
+from utils.call_stock_service import call_stock_service
 
 class CreateReserve(Resource):
     def post(self):
@@ -26,8 +28,7 @@ class CreateReserve(Resource):
         
         if len(data.get("products")) == 0:
             return {"message": "empty product list"}, 400
-        
-        
+                
         url_users = os.environ.get("CUSTOMERS_URL", "http://localhost:5001")
         user_id = data.get("user_id")
         url = f"{url_users}/customers/{user_id}"
@@ -57,17 +58,36 @@ class CreateReserve(Resource):
 
         try:
             db.session.add(reserve)
-            db.session.commit()
+            db.session.flush()
         except IntegrityError:
+            db.session.rollback()
             return {
                 "message": "missing field"
             }, 409
 
         for product in data.get("products"):
+            try:
+                product_id = uuid.UUID(product["id"])
+                quantity = int(product["quantity"])
+            except:
+                db.session.rollback()
+                return {"message": "invalid product or quantity"}, 400
+
+            # Llamar a stock para reservar
+            status, resp = call_stock_service("/stock/reserve", {
+                "product_id": str(product_id),
+                "quantity": quantity,
+                "user": user_id
+            })
+            if status != 200:
+                db.session.rollback()
+                return {"message": "Stock reservation failed", "details": resp}, status
+
             reserveProduct = OrderProducts(
                 order_id = str(reserve.id),
                 product_id = product["id"],
-                quantity = product["quantity"]
+                quantity = product["quantity"],
+                warehouse_id = uuid.UUID(resp["warehouse_id"])
             )
             db.session.add(reserveProduct)
         

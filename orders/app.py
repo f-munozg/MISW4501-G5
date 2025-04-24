@@ -8,6 +8,7 @@ from views.create_reserve import CreateReserve
 from views.get_customer_orders import GetCustomerOrders
 from views.get_order import GetOrder
 from views.get_orders import GetOrders
+from views.update_order import UpdateOrderStatus
 import os, uuid
 
 def create_app():
@@ -44,6 +45,7 @@ def add_routes(application):
     api.add_resource(GetOrder, "/orders/<order_id>")
     api.add_resource(CreateOrder, "/orders/order")
     api.add_resource(CreateReserve, "/orders/reserve")
+    api.add_resource(UpdateOrderStatus, "/order/updateStatus")
 
 if __name__ == "__main__":
     application = create_app()

@@ -1,10 +1,21 @@
 from flask_sqlalchemy import SQLAlchemy
-from marshmallow import Schema, fields
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey, Text, Float, DateTime
 from sqlalchemy.dialects.postgresql import UUID
-import uuid, enum
+from sqlalchemy import Enum as SQLAlchemyEnum
+from marshmallow import Schema, fields
+import uuid
+import enum
+
 
 db = SQLAlchemy()
+
+class MeansOfPayment(enum.Enum):
+    TRANSFERENCIA_BANCARIA = "Transferencia bancaria"
+    PAGO_ENTRE_CELULARES = "Pago entre celulares"
+
+class TypeOfPayment(enum.Enum):
+    PARCIAL = "Parcial"
+    COMPLETO = "Completo"
 
 class User(db.Model):
     __tablename__ = "users"
@@ -42,6 +53,16 @@ class Role(db.Model):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), nullable=False)
+
+class Payment(db.Model):
+    __tablename__ = "payment"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    order_id = Column(UUID(as_uuid=True), nullable = False)
+    date_payment = Column(DateTime)
+    type_payment = Column(SQLAlchemyEnum(TypeOfPayment), nullable=False)
+    mean_payment = Column(SQLAlchemyEnum(MeansOfPayment), nullable=False)
+    voucher_payment = Column(Text)
 
 class CustomerJsonSchema(Schema):
     id = fields.UUID()

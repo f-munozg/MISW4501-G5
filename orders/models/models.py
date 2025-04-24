@@ -44,12 +44,15 @@ class Order(db.Model):
     date_delivery = Column(DateTime)
     status = Column(String(50), nullable=False)
 
+    products = db.relationship("OrderProducts", backref="order", lazy="joined", cascade="all, delete-orphan")
+
 class OrderProducts(db.Model):
     __tablename__ = "order_products"
 
     order_id = Column(UUID(as_uuid=True), ForeignKey('orders.id'), nullable=False)
     product_id = Column(UUID(as_uuid=True), ForeignKey('products.id'), nullable=False)
     quantity = Column(Float, nullable=False)
+    warehouse_id = Column(UUID(as_uuid=True), nullable=False)
 
     __table_args__ = (
         db.PrimaryKeyConstraint('order_id', 'product_id'),
