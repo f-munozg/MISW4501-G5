@@ -22,7 +22,7 @@ class TestUpdateOrderStatus(unittest.TestCase):
     def test_update_order_status_missing_fields(self):
         """Prueba cuando faltan campos obligatorios."""
         response = self.client.put(
-            "/order/updateStatus",
+            "/orders/updateStatus",
             data=json.dumps({"order_id": "some-id"}),
             content_type="application/json"
         )
@@ -33,7 +33,7 @@ class TestUpdateOrderStatus(unittest.TestCase):
     def test_update_order_status_invalid_uuid(self):
         """Prueba cuando el UUID no es válido."""
         response = self.client.put(
-            "/order/updateStatus",
+            "/orders/updateStatus",
             data=json.dumps({
                 "order_id": "not-a-valid-uuid",
                 "status": "shipped"

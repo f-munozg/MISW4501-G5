@@ -81,6 +81,3 @@ class TestProductStockLocation(unittest.TestCase):
         self.assertEqual(response.json["total"], 1)
         self.assertEqual(len(response.json["results"]), 1)
         self.assertEqual(response.json["results"][0]["status"], "Vigente")
-
-if __name__ == "__main__":
-    unittest.main()

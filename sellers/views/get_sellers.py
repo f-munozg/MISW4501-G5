@@ -14,6 +14,5 @@ class GetSellers(Resource):
         ).dump(sellers)
 
         return {
-            "sellers": jsonSellers
-            
+            "sellers": jsonSellers            
         }, 200

@@ -2,11 +2,12 @@
 env_customers/
 env_providers/
 env_products/
+env_reports/
 env_sellers/
 env_order/
 env_sales/
-env_users/
 env_stock/
+env_users/
 env_order/
 env_users/
 .env/
