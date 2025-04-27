@@ -17,20 +17,20 @@ class TestProductStockLocation(unittest.TestCase):
         self.app_context.pop()
 
     def test_missing_filters(self):
-        """Debe fallar si no se envía ni 'search' ni 'warehouse_id'."""
+        """Debe fallar si no se envía ni 'product' ni 'warehouse_id'."""
         response = self.client.get("/stock/product_location")
         self.assertEqual(response.status_code, 400)
         self.assertIn("Debe enviar al menos", response.json["error"])
 
     def test_invalid_limit_offset(self):
         """Debe fallar si limit u offset no son números."""
-        response = self.client.get("/stock/product_location?search=SKU-123&limit=abc&offset=xyz")
+        response = self.client.get("/stock/product_location?product=SKU-123&limit=abc&offset=xyz")
         self.assertEqual(response.status_code, 400)
         self.assertIn("limit and offset must be integers", response.json["message"])
 
     @patch("models.models.db.session")
     def test_valid_search_filter(self, mock_db_session):
-        """Debe ejecutar correctamente si solo se envía 'search'."""
+        """Debe ejecutar correctamente si solo se envía 'product'."""
         mock_query = MagicMock()
         mock_query.join.return_value = mock_query
         mock_query.filter.return_value = mock_query
@@ -38,7 +38,7 @@ class TestProductStockLocation(unittest.TestCase):
         mock_query.count.return_value = 0
         mock_db_session.query.return_value = mock_query
 
-        response = self.client.get("/stock/product_location?search=ABC")
+        response = self.client.get("/stock/product_location?product=ABC")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["total"], 0)
         self.assertEqual(response.json["results"], [])
@@ -76,11 +76,8 @@ class TestProductStockLocation(unittest.TestCase):
         mock_query.count.return_value = 1
         mock_db_session.query.return_value = mock_query
 
-        response = self.client.get("/stock/product_location?search=SKU-123&warehouse_id=abc123")
+        response = self.client.get("/stock/product_location?product=SKU-123&warehouse_id=abc123")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["total"], 1)
         self.assertEqual(len(response.json["results"]), 1)
         self.assertEqual(response.json["results"][0]["status"], "Vigente")
-
-if __name__ == "__main__":
-    unittest.main()

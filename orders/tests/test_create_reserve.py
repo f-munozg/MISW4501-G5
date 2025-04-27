@@ -15,11 +15,18 @@ class CreateReserveTestCase(unittest.TestCase):
         self.app = app.test_client()  
         self.app.testing = True 
 
-    @patch("requests.request")
+    @patch("views.create_reserve.call_stock_service")  # 👈 este es importante
+    @patch("requests.request")  # mock para el request GET a customers
     @patch("models.models.db.session")
-    def test_create_reserve(self, mock_db_session, mock_requests):
+    def test_create_reserve(self, mock_db_session, mock_requests, mock_call_stock):
+        # Mock DB
         mock_db_session.add = MagicMock()
         mock_db_session.commit = MagicMock()
+        mock_db_session.flush = MagicMock()
+        mock_db_session.rollback = MagicMock()
+        mock_db_session.query.return_value.filter_by.return_value.all.return_value = []
+
+        # Mock GET /customers/{id}
         mock_requests.return_value.status_code = 200
         mock_requests.return_value.json.return_value = {
             "customer": {
@@ -27,6 +34,13 @@ class CreateReserveTestCase(unittest.TestCase):
             }
         }
 
+        # Mock call_stock_service
+        mock_call_stock.return_value = (
+            200,
+            {"warehouse_id": "e78de541-09fb-4f4e-a3f4-99cc4c0e94a4"}
+        )
+
+        # Realizamos la solicitud
         response = self.app.post('/orders/reserve',
             data=json.dumps({
                 "user_id": "9ebec3c3-3406-498b-be8e-c87a24774c55",
@@ -46,6 +60,8 @@ class CreateReserveTestCase(unittest.TestCase):
         )
         
         self.assertEqual(response.status_code, 201)
+        self.assertIn("reserve created successfully", response.get_data(as_text=True))
+
 
     def test_create_reserve_missing_fields(self):
         response = self.app.post('/orders/reserve',

@@ -17,21 +17,16 @@ class GetCustomer(Resource):
             return {"message": "invalid user id"}, 400
 
         customer = db.session.query(Customer).filter_by(user_id = user_id).first()
-        print('customer:', customer)
         if not customer:
-            print('not customer')
             return {
                 "message": "customer not found"
             }, 404
         
         store = db.session.query(Store).filter_by(customer_id = customer.id).first()
-        print('store:', store)
         if not store:
-            print('not store')
             return {
                 "message": "store not found"
             }, 500
-
 
         jsonCustomer = CustomerJsonSchema().dump(customer)
         jsonStore = StoreJsonSchema().dump(store)

@@ -12,6 +12,7 @@ class ProductWithStock(Resource):
             return {"message": "limit and offset must be integers"}, 400
 
         base_query = db.session.query(
+            Product.id,
             Product.name.label("product_name"),
             Product.sku,
             Product.photo,
@@ -31,6 +32,7 @@ class ProductWithStock(Resource):
 
         data = [
             {
+                "id": str(row.id),
                 "product": row.product_name,
                 "sku": row.sku,
                 "photo": row.photo,

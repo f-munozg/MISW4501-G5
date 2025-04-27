@@ -10,10 +10,10 @@ class GetProviders(Resource):
 
         providers = db.session.query(Provider).all()
 
-        jsonProviders = ProviderJsonSchema(
-            many = True, only=("id", "name")
+        jsonCustomers = ProviderJsonSchema(
+            many = True,
         ).dump(providers)
 
         return {
-            "providers": jsonProviders
+            "providers": jsonCustomers
         }, 200

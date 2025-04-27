@@ -4,6 +4,7 @@ from models.models import db, Order, OrderProducts
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
+from utils import call_stock_service
 
 class CreateOrder(Resource):
     def post(self):
@@ -47,6 +48,30 @@ class CreateOrder(Resource):
         if not order:
             return { "message": "invalid reserve to activate"}, 400
         
+        for item in order.products:
+            # Liberar reserva
+            status1, res1 = call_stock_service("/stock/release", {
+                "product_id": str(item.product_id),
+                "warehouse_id": str(item.warehouse_id),
+                "quantity": item.quantity,
+                "user": user_id
+            })
+            if status1 != 200:
+                db.session.rollback()
+                return {"message": "Failed to release reserved stock", "details": res1}, status1
+
+            # Registrar salida
+            status2, res2 = call_stock_service("/stock/movements", {
+                "product_id": str(item.product_id),
+                "warehouse_id": str(item.warehouse_id),
+                "quantity": item.quantity,
+                "user": user_id,
+                "movement_type": "SALIDA"
+            })
+            if status2 != 201:
+                db.session.rollback()
+                return {"message": "Failed to record stock movement", "details": res2}, status2
+
         order.status = "created"
 
         try:

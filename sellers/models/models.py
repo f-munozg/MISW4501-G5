@@ -1,9 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, ForeignKey, Enum, Float
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
-import uuid
+from marshmallow import Schema, fields
+from sqlalchemy import Enum as SQLAlchemyEnum
+import uuid, enum
 
 db = SQLAlchemy()
+
+class SellerZone(enum.Enum):
+    NORTE = "NORTE"
+    SUR = "SUR"
+    ORIENTE = "ORIENTE"
+    OCCIDENTE = "OCCIDENTE"
 
 class User(db.Model):
     __tablename__ = "users"
@@ -23,7 +31,7 @@ class Seller(db.Model):
     email = Column(String(255), nullable=False)
     address = Column(String(255))
     phone = Column(String(255)) 
-    zone = Column(Enum('NORTE', 'SUR', 'ORIENTE', 'OCCIDENTE', name='zone'), nullable=False)
+    zone = Column(SQLAlchemyEnum(SellerZone), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     
     __table_args__ = (
@@ -35,3 +43,13 @@ class Role(db.Model):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), nullable=False)
+
+class SellerJsonSchema(Schema):
+    id = fields.UUID()
+    identification_number = fields.Str()
+    name = fields.Str()
+    email = fields.Str()
+    address = fields.Str()
+    phone = fields.Str()
+    zone = fields.Enum(SellerZone)
+    user_id = fields.UUID()

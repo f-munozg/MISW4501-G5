@@ -7,7 +7,7 @@ from views.add_provider import AddProvider
 from views.get_providers import GetProviders
 from views.get_provider import GetProvider
 
-import os
+import os, uuid
 
 def create_app():
     application = Flask(__name__)
@@ -20,8 +20,7 @@ def create_app():
 
     application.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{username}:{password}@{host}:{port}/{dbName}'
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    application.config["JWT_SECRET_KEY"] = "frase-secreta"
-    application.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+    application.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', str(uuid.uuid4()))
 
     if not os.environ.get('TESTING'):
         init_db(application)
@@ -35,8 +34,8 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/providers/ping")
     api.add_resource(AddProvider, "/providers/add")
-    api.add_resource(GetProviders, "/providers")
     api.add_resource(GetProvider, "/providers/<provider_id>")
+    api.add_resource(GetProviders, "/providers")
 
 def init_db(app):
     db.init_app(app)

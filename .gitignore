@@ -1,9 +1,15 @@
 # Ignorar entornos virtuales
+env_customers/
 env_providers/
 env_products/
+env_reports/
 env_sellers/
-env_users/
+env_order/
+env_sales/
 env_stock/
+env_users/
+env_order/
+env_users/
 .env/
 .virtualenv/
 
@@ -153,3 +159,6 @@ cython_debug/
 #VSC Settings
 .vscode
 .idea/*
+
+#Sonarqube
+.scannerwork

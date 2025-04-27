@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from marshmallow import Schema, fields
 from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, Text, Float, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Enum as SQLAlchemyEnum
@@ -18,6 +19,10 @@ class ProductCategory(enum.Enum):
     BELLEZA = "Belleza"
     JUGUETE = "Juguete"
     HOGAR = "Hogar"
+
+class StockMovementType(enum.Enum):
+    INGRESO = "INGRESO"
+    SALIDA = "SALIDA"
 
 class Product(db.Model):
     __tablename__ = "products"
@@ -44,6 +49,7 @@ class Stock(db.Model):
     product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"), nullable=False)
     warehouse_id = Column(UUID(as_uuid=True), ForeignKey("warehouse.id"), nullable=False)
     quantity = Column(Integer, nullable=False)
+    reserved_quantity = Column(Integer, nullable=False, default=0)
     threshold_stock = Column(Integer, nullable=False)
     critical_level = Column(Boolean, nullable=False)
     date_update = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -54,6 +60,20 @@ class Stock(db.Model):
     product = db.relationship("Product", back_populates="stock")
     warehouse = db.relationship("Warehouse", back_populates="stock")
 
+class HistoryStockLog(db.Model):
+    __tablename__ = "history_stock_log"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"), nullable=False)
+    warehouse_id = Column(UUID(as_uuid=True), ForeignKey("warehouse.id"), nullable=False)
+    quantity = Column(Integer, nullable=False)
+    user = Column(String(200), nullable=False)
+    movement_type = Column(SQLAlchemyEnum(StockMovementType), nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
+    alert_message = Column(String(300), nullable=True)
+
+    product = db.relationship("Product")
+    warehouse = db.relationship("Warehouse")
 
 class Warehouse(db.Model):
     __tablename__ = "warehouse"
@@ -69,3 +89,7 @@ class Warehouse(db.Model):
     truck_capacity = Column(Integer, nullable=False)
 
     stock = db.relationship("Stock", back_populates="warehouse")
+
+class WarehouseJsonSchema(Schema):
+    id = fields.UUID()
+    name = fields.Str()
