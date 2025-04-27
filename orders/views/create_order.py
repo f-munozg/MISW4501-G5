@@ -61,7 +61,7 @@ class CreateOrder(Resource):
                 return {"message": "Failed to release reserved stock", "details": res1}, status1
 
             # Registrar salida
-            status2, res2 = call_stock_service("/stock/movements", {
+            status2, res2 = call_stock_service("/stock/movement", {
                 "product_id": str(item.product_id),
                 "warehouse_id": str(item.warehouse_id),
                 "quantity": item.quantity,
