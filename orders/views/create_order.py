@@ -4,7 +4,7 @@ from models.models import db, Order, OrderProducts
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from utils import call_stock_service
+from utils.call_stock_service import call_stock_service
 
 class CreateOrder(Resource):
     def post(self):
