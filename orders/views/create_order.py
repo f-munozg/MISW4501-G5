@@ -4,7 +4,7 @@ from models.models import db, Order, OrderProducts
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from utils import call_stock_service
+from utils.call_stock_service import call_stock_service
 
 class CreateOrder(Resource):
     def post(self):
@@ -61,7 +61,7 @@ class CreateOrder(Resource):
                 return {"message": "Failed to release reserved stock", "details": res1}, status1
 
             # Registrar salida
-            status2, res2 = call_stock_service("/stock/movements", {
+            status2, res2 = call_stock_service("/stock/movement", {
                 "product_id": str(item.product_id),
                 "warehouse_id": str(item.warehouse_id),
                 "quantity": item.quantity,
