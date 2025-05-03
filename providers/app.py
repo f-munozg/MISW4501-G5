@@ -6,6 +6,7 @@ from views.health_check import HealthCheck
 from views.add_provider import AddProvider
 from views.get_providers import GetProviders
 from views.get_provider import GetProvider
+from views.add_tax_rule import AddTaxRule
 
 import os, uuid
 
@@ -36,6 +37,7 @@ def add_routes(application):
     api.add_resource(AddProvider, "/providers/add")
     api.add_resource(GetProvider, "/providers/<provider_id>")
     api.add_resource(GetProviders, "/providers")
+    api.add_resource(AddTaxRule, "/rules/tax/add")
 
 def init_db(app):
     db.init_app(app)
