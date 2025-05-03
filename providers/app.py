@@ -7,6 +7,7 @@ from views.add_provider import AddProvider
 from views.get_providers import GetProviders
 from views.get_provider import GetProvider
 from views.add_tax_rule import AddTaxRule
+from views.add_commercial_rule import AddCommercialRule
 
 import os, uuid
 
@@ -38,6 +39,7 @@ def add_routes(application):
     api.add_resource(GetProvider, "/providers/<provider_id>")
     api.add_resource(GetProviders, "/providers")
     api.add_resource(AddTaxRule, "/rules/tax/add")
+    api.add_resource(AddCommercialRule, "/rules/commercial/add")
 
 def init_db(app):
     db.init_app(app)
