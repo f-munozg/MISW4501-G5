@@ -37,9 +37,9 @@ class TipoImpuesto(enum.Enum):
     OTRO = "Otro"
 
 class TipoReglaComercial(enum.Enum):
-    Descuento = "Descuento"
-    Pedido_Minimo = "Pedido Mínimo"
-    Otro = "Otro"
+    DESCUENTO = "Descuento"
+    PEDIDO_MINIMO = "Pedido Mínimo"
+    OTRO = "Otro"
 
 class Provider(db.Model):
     __tablename__ = "providers"
@@ -79,7 +79,7 @@ class Rule(db.Model):
     value_tax = Column(Float, nullable=True)  # Porcentaje o monto fijo
 
     # Campos específicos para reglas comerciales
-    tipo_regla_comercial = Column(SQLAlchemyEnum(TipoReglaComercial), nullable=True)
+    type_commercial_rule = Column(SQLAlchemyEnum(TipoReglaComercial), nullable=True)
 
     # Campos específicos para reglas legales
     categoria_producto = Column(String(100), nullable=True)
