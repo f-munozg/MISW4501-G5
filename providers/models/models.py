@@ -82,7 +82,7 @@ class Rule(db.Model):
     type_commercial_rule = Column(SQLAlchemyEnum(TipoReglaComercial), nullable=True)
 
     # Campos específicos para reglas legales
-    categoria_producto = Column(String(100), nullable=True)
+    category_product = Column(SQLAlchemyEnum(ProductCategory), nullable=True)
 
 class Portfolio_Rule(db.Model):
     __tablename__ = "portfolio_rules"
