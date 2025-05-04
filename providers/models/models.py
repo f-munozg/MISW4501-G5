@@ -36,7 +36,7 @@ class TipoImpuesto(enum.Enum):
     BIENES_INMUEBLES = "Bienes Inmuebles"
     OTRO = "Otro"
 
-class TipoReglaComercial(enum.Enum):
+class TypeCommercialRule(enum.Enum):
     DESCUENTO = "Descuento"
     PEDIDO_MINIMO = "Pedido Mínimo"
     OTRO = "Otro"
@@ -79,7 +79,7 @@ class Rule(db.Model):
     value_tax = Column(Float, nullable=True)  # Porcentaje o monto fijo
 
     # Campos específicos para reglas comerciales
-    type_commercial_rule = Column(SQLAlchemyEnum(TipoReglaComercial), nullable=True)
+    type_commercial_rule = Column(SQLAlchemyEnum(TypeCommercialRule), nullable=True)
 
     # Campos específicos para reglas legales
     category_product = Column(SQLAlchemyEnum(ProductCategory), nullable=True)

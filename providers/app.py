@@ -7,8 +7,17 @@ from views.add_provider import AddProvider
 from views.get_providers import GetProviders
 from views.get_provider import GetProvider
 from views.add_tax_rule import AddTaxRule
-from views.add_commercial_rule import AddCommercialRule
+from views.get_tax_rule import GetTaxRule
+from views.update_tax_rule import UpdateTaxRule
+from views.delete_tax_rule import DeleteTaxRule
 from views.add_legal_rule import AddLegalRule
+from views.get_legal_rule import GetLegalRule
+from views.update_legal_rule import UpdateLegalRule
+from views.delete_legal_rule import DeleteLegalRule
+from views.add_commercial_rule import AddCommercialRule
+from views.get_commercial_rule import GetCommercialRule
+from views.update_commercial_rule import UpdateCommercialRule
+from views.delete_commercial_rule import DeleteCommercialRule
 
 import os, uuid
 
@@ -39,9 +48,21 @@ def add_routes(application):
     api.add_resource(AddProvider, "/providers/add")
     api.add_resource(GetProvider, "/providers/<provider_id>")
     api.add_resource(GetProviders, "/providers")
+    
     api.add_resource(AddTaxRule, "/rules/tax/add")
-    api.add_resource(AddCommercialRule, "/rules/commercial/add")
+    api.add_resource(GetTaxRule, "/rules/tax/get")
+    api.add_resource(UpdateTaxRule, "/rules/tax/update/<string:rule_id>")
+    api.add_resource(DeleteTaxRule, "/rules/tax/delete/<string:rule_id>")
+
     api.add_resource(AddLegalRule, "/rules/legal/add")
+    api.add_resource(GetLegalRule, "/rules/legal/get")
+    api.add_resource(UpdateLegalRule, "/rules/legal/update/<string:rule_id>")
+    api.add_resource(DeleteLegalRule, "/rules/legal/delete/<string:rule_id>")
+    
+    api.add_resource(AddCommercialRule, "/rules/commercial/add")
+    api.add_resource(GetCommercialRule, "/rules/commercial/get")
+    api.add_resource(UpdateCommercialRule, "/rules/commercial/update/<string:rule_id>")
+    api.add_resource(DeleteCommercialRule, "/rules/commercial/delete/<string:rule_id>")
 
 def init_db(app):
     db.init_app(app)
@@ -50,5 +71,5 @@ def init_db(app):
 
 if __name__ == "__main__":
     application = create_app()
-    port = int(os.environ.get('APP_PORT', 4000))
+    port = int(os.environ.get('APP_PORT', 5003))
     application.run(host='0.0.0.0', port=port)
