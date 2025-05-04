@@ -28,7 +28,7 @@ class CreateReserve(Resource):
         if len(data.get("products")) == 0:
             return {"message": "empty product list"}, 400
                 
-        url_users = os.environ.get("CUSTOMERS_URL", "http://localhost:5001")
+        url_users = os.environ.get("CUSTOMERS_URL", "http://192.168.20.11:5001")
         user_id = data.get("user_id")
         url = f"{url_users}/customers/{user_id}"
         headers = {} #"Authorization": self.token}

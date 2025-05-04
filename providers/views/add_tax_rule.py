@@ -41,4 +41,7 @@ class AddTaxRule(Resource):
             db.session.rollback()
             return {"message": "Error al guardar la regla en la base de datos."}, 500
 
-        return {"message": "Regla tributaria creada exitosamente", "id": regla.id}, 201
+        return {
+            "message": "Regla tributaria creada exitosamente", 
+            "id": str(regla.id)
+        }, 201

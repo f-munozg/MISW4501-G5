@@ -8,18 +8,13 @@ from views.get_warehouses import GetWarehouses
 from views.stock_movements import StockMovement
 from views.stock_release import StockRelease
 from views.stock_reserve import StockReserve
+from views.stock_alert_critical import StockCriticalCheck
 from models.models import db
 
 import os, uuid
 
 def create_app():
     application = Flask(__name__)
-
-    # host = os.environ.get('DB_HOST', 'localhost')
-    # port = os.environ.get('DB_PORT', '5432')
-    # dbName = os.environ.get('DB_NAME', 'gcp_db')
-    # username = os.environ.get('DB_USERNAME', 'postgres')
-    # password = os.environ.get('DB_PASSWORD', 'Password123!')
 
     host = os.environ.get('DB_HOST', 'localhost')
     port = os.environ.get('DB_PORT', '9432')
@@ -49,6 +44,7 @@ def add_routes(application):
     api.add_resource(StockMovement, "/stock/movement")
     api.add_resource(StockReserve, "/stock/reserve")
     api.add_resource(StockRelease, "/stock/release")
+    api.add_resource(StockCriticalCheck, "/stock/critical")
 
 def init_db(app):
     db.init_app(app)

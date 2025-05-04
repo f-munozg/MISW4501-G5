@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from models.models import db, Rule, TypeRule, TipoReglaComercial
+from models.models import db, Rule, TypeRule, TypeCommercialRule
 from sqlalchemy.orm.exc import NoResultFound
 
 class AddCommercialRule(Resource):
@@ -17,9 +17,9 @@ class AddCommercialRule(Resource):
             return {"message": f"Faltan campos requeridos: {', '.join(missing_fields)}"}, 400
 
         try:
-            type_commercial_rule = TipoReglaComercial(data["type_commercial_rule"])
+            type_commercial_rule = TypeCommercialRule(data["type_commercial_rule"])
         except ValueError:
-            return {"message": f"Tipo de impuesto inválido. Opciones: {[e.value for e in TipoReglaComercial]}"}, 400
+            return {"message": f"Tipo de impuesto inválido. Opciones: {[e.value for e in TypeCommercialRule]}"}, 400
 
         regla = Rule(
             country = data["country"],
@@ -35,4 +35,7 @@ class AddCommercialRule(Resource):
             db.session.rollback()
             return {"message": "Error al guardar la regla en la base de datos."}, 500
 
-        return {"message": "Regla comercial creada exitosamente", "id": regla.id}, 201
+        return {
+            "message": "Regla comercial creada exitosamente", 
+            "id": str(regla.id)
+        }, 201

@@ -1,10 +1,11 @@
-import uuid
+import uuid, os, requests
 import time
 from flask import request
 from flask_restful import Resource
 from models.models import db, Stock, HistoryStockLog, Product, Warehouse
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
+from sqlalchemy.orm import joinedload
 
 class StockMovement(Resource):
     def post(self):
@@ -114,3 +115,40 @@ class StockMovement(Resource):
             "movement_type": movement_type,
             "time_elapsed_seconds": elapsed
         }, 201
+
+    def get(self):
+        try:
+            logs = db.session.query(HistoryStockLog).options(
+                joinedload(HistoryStockLog.product),
+                joinedload(HistoryStockLog.warehouse)
+            ).order_by(HistoryStockLog.timestamp.desc()).all()
+
+            url_users = os.environ.get("USERS_URL", "http://localhost:5010")
+            url = f"{url_users}/users/get_users_movements"
+            headers = {} #"Authorization": self.token}
+            response = requests.request("GET", url, headers=headers)
+
+            if response.status_code != 200:
+                return response.json(), response.status_code
+
+            users_data = response.json().get("users", [])
+            user_dict = {user["id"]: user["username"] for user in users_data}
+
+            response_data = []
+            for log in logs:
+                user_id = log.user
+                nombre_usuario = user_dict.get(user_id, "Desconocido")
+
+                response_data.append({
+                    "fecha": log.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                    "nombre_producto": log.product.name if log.product else "Desconocido",
+                    "nombre_bodega": log.warehouse.name if log.warehouse else "Desconocida",
+                    "tipo_movimiento": log.movement_type.value,
+                    "cantidad": log.quantity,
+                    "usuario": nombre_usuario
+                })
+
+            return {"movimientos": response_data}, 200
+
+        except Exception as e:
+            return {"message": "Error al consultar movimientos de stock", "details": str(e)}, 500
