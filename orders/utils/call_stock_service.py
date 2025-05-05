@@ -1,7 +1,8 @@
 import os
 import requests
 
-STOCK_URL = os.environ.get("STOCK_URL", "http://localhost:5002")
+STOCK_URL = os.environ.get("STOCK_URL", "http://192.168.20.11:4003")
+
 
 def call_stock_service(endpoint, payload):
     try:

@@ -1,10 +1,45 @@
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow import Schema, fields
-from sqlalchemy import Column, String, Integer, ForeignKey, Enum, Float
+from sqlalchemy import Column, String, Integer, ForeignKey, Float
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
+from sqlalchemy import Enum as SQLAlchemyEnum
 import uuid
+import enum
 
 db = SQLAlchemy()
+
+class ProductCategory(enum.Enum):
+    FARMACIA = "Farmacia"
+    ALIMENTACIÓN = "Alimentación"
+    LIMPIEZA = "Limpieza"
+    ELECTRÓNICA = "Electrónica"
+    ROPA = "Ropa"
+    HERRAMIENTAS = "Herramientas"
+    BELLEZA = "Belleza"
+    JUGUETE = "Juguete"
+    HOGAR = "Hogar"
+
+class TypeRule(enum.Enum):
+    LEGAL = "Legal"
+    COMERCIAL = "Comercial"
+    TRIBUTARIA = "Tributaria"
+
+class TipoImpuesto(enum.Enum):
+    RENTA_PERSONAS_FISICAS = "Renta Personas Físicas"
+    SOCIEDADES = "Sociedades"
+    PATRIMONIO = "Patrimonio"
+    VALOR_AGREGADO = "Valor Agregado"
+    ESPECIAL = "Especial"
+    AMBIENTAL = "Ambiental"
+    TRANSACCIONES_FINANCIERAS = "Transacciones Financieras"
+    SUCESIONES_DONACIONES = "Sucesiones y Donaciones"
+    BIENES_INMUEBLES = "Bienes Inmuebles"
+    OTRO = "Otro"
+
+class TypeCommercialRule(enum.Enum):
+    DESCUENTO = "Descuento"
+    PEDIDO_MINIMO = "Pedido Mínimo"
+    OTRO = "Otro"
 
 class Provider(db.Model):
     __tablename__ = "providers"
@@ -35,10 +70,19 @@ class Rule(db.Model):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     country = Column(String(100), nullable=False)
-    type_rule = Column(Enum('LEGAL', 'COMERCIAL', 'TRIBUTARIA', name='type_rule'), nullable=False)
-    value_rule = Column(Float, nullable=False)
-    description = Column(String(250), nullable=False)
-    regulatory_entity = Column(String(200), nullable=False)
+    type_rule = Column(SQLAlchemyEnum(TypeRule), nullable=False)
+    # Campos comunes
+    description = Column(String(500), nullable=True)
+    
+    # Campos específicos para reglas tributarias
+    type_tax = Column(SQLAlchemyEnum(TipoImpuesto), nullable=True)
+    value_tax = Column(Float, nullable=True)  # Porcentaje o monto fijo
+
+    # Campos específicos para reglas comerciales
+    type_commercial_rule = Column(SQLAlchemyEnum(TypeCommercialRule), nullable=True)
+
+    # Campos específicos para reglas legales
+    category_product = Column(SQLAlchemyEnum(ProductCategory), nullable=True)
 
 class Portfolio_Rule(db.Model):
     __tablename__ = "portfolio_rules"

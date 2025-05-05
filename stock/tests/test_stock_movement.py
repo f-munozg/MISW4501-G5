@@ -4,6 +4,8 @@ from unittest.mock import patch, MagicMock
 from app import create_app
 from datetime import datetime
 import uuid
+from flask import json
+from views.stock_movements import StockMovement
 
 class TestStockMovement(unittest.TestCase):
     def setUp(self):
@@ -99,3 +101,60 @@ class TestStockMovement(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.get_json()["message"], "Invalid movement_type. Must be 'INGRESO' or 'SALIDA'")
 
+    @patch("views.stock_movements.requests.request")
+    @patch("views.stock_movements.db.session")
+    def test_get_stock_movements_success(self, mock_db_session, mock_requests):
+        # Mock de movimientos
+        log = MagicMock()
+        log.timestamp = datetime(2025, 5, 3, 17, 0)
+        log.product.name = "Ibuprofeno"
+        log.warehouse.name = "Bodega Central"
+        log.movement_type.value = "INGRESO"
+        log.quantity = 10
+        log.user = "user-id-123"
+
+        mock_db_session.query.return_value.options.return_value.order_by.return_value.all.return_value = [log]
+
+        # Mock de llamada a users service
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "users": [{"id": "user-id-123", "username": "Carlos Ruiz"}]
+        }
+        mock_requests.return_value = mock_response
+
+        response = self.client.get("/stock/movement")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("movimientos", response.json)
+        self.assertEqual(len(response.json["movimientos"]), 1)
+        self.assertEqual(response.json["movimientos"][0]["usuario"], "Carlos Ruiz")
+
+    @patch("views.stock_movements.requests.request")
+    @patch("views.stock_movements.db.session")
+    def test_get_stock_movements_user_service_error(self, mock_db_session, mock_requests):
+        # Simula logs válidos
+        log = MagicMock()
+        log.timestamp = datetime.utcnow()
+        log.product.name = "Aspirina"
+        log.warehouse.name = "Bodega Norte"
+        log.movement_type.value = "SALIDA"
+        log.quantity = 5
+        log.user = "user-id-456"
+
+        mock_db_session.query.return_value.options.return_value.order_by.return_value.all.return_value = [log]
+
+        # Simula error al llamar al servicio de usuarios
+        mock_response = MagicMock()
+        mock_response.status_code = 500
+        mock_response.json.return_value = {"message": "error"}
+        mock_requests.return_value = mock_response
+
+        response = self.client.get("/stock/movement")
+        self.assertEqual(response.status_code, 500)
+        self.assertIn("message", response.json)
+
+    @patch("views.stock_movements.requests.request", side_effect=Exception("fallo inesperado"))
+    def test_get_stock_movements_exception(self, mock_requests):
+        response = self.client.get("/stock/movement")
+        self.assertEqual(response.status_code, 500)
+        self.assertIn("Error al consultar movimientos de stock", response.json["message"])
