@@ -48,6 +48,7 @@ class Truck(db.Model):
     user_id = Column(UUID(as_uuid=True), nullable=False)
     capacity = Column(Float, nullable=False)
     location = Column(String(25))
+    available = Column(Boolean)
     updated_at = Column(DateTime)
 
 class Route(db.Model):
@@ -81,4 +82,5 @@ class TruckJsonSchema(Schema):
     user_id = fields.UUID()
     capacity = fields.Float()
     location = fields.Str()
+    available = fields.Boolean()
     updated_at = fields.DateTime()

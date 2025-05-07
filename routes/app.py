@@ -13,6 +13,7 @@ from views.update_stop import UpdateStop
 from views.register_truck_location import RegisterTruckLocation
 from views.save_truck_location import SaveTruckLocation
 from views.get_routes import GetRoutes
+from views.get_stops_by_customer import GetStopsByCustomer
 from models.models import db
 
 import os, uuid
@@ -53,6 +54,7 @@ def add_routes(application):
     api.add_resource(RegisterTruckLocation, "/routes/truck/<truck_id>/location") # POST registrar ubicación
     api.add_resource(SaveTruckLocation, "/routes/truck/<truck_id>/location") # PUT actualizar ubicación
     api.add_resource(GetRoutes, "/routes") # GET consultar rutas
+    api.add_resource(GetStopsByCustomer, "/routes/stops/customer/<customer_id>") # GET consultar visitas a cliente
     
 
 def init_db(app):

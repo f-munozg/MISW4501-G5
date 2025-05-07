@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from flask_restful import Resource
-from models.models import db, Route, Truck, TruckJsonSchema
+from models.models import db, Route, Truck, TruckJsonSchema, RouteStatus, RouteType
 
 class GetDeliveryLocation(Resource):
     def get(self, route_id):
@@ -11,7 +11,8 @@ class GetDeliveryLocation(Resource):
         except:
             return {"message": "invalid route id"}, 400
         
-        route = db.session.query(Route).filter(Route.id == route_id, Route.type == "Entrega", Route.status != "Completada").first()
+        route = db.session.query(Route).filter(Route.id == route_id, Route.type == RouteType.ENTREGA, 
+                                               Route.status != RouteStatus.COMPLETADA).first()
 
         if not route:
             return {"message": "active route not found"}, 404
@@ -23,7 +24,7 @@ class GetDeliveryLocation(Resource):
         
         json_truck = TruckJsonSchema(
             only=  ("id", "location")
-        )
+        ).dump(truck)
 
         return {
             "truck": json_truck

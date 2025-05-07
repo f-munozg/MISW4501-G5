@@ -16,7 +16,7 @@ class GetRouteDetail(Resource):
         if not route:
             return { "message": "route not found"}, 404
 
-        stops = db.session.query(RouteStop).filter(route = route.id).all()
+        stops = db.session.query(RouteStop).filter(RouteStop.route_id == route.id).all()
 
         json_route = RouteJsonSchema().dump(route)
         json_stops = StopsJsonSchema(
