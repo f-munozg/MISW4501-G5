@@ -52,6 +52,7 @@ class CreateRouteDelivery(Resource):
                 stop = RouteStop(
                     eta = 1,
                     customer_id = order.get("customer_id"),
+                    order_id = order.get("order_id"),
                     route_id = route.id,
                     status = StopStatus.PENDIENTE,
                     optional = False

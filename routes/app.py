@@ -14,6 +14,9 @@ from views.register_truck_location import RegisterTruckLocation
 from views.save_truck_location import SaveTruckLocation
 from views.get_routes import GetRoutes
 from views.get_stops_by_customer import GetStopsByCustomer
+from views.create_truck import CreateTruck
+from views.update_truck import UpdateTruck
+from views.get_stops import GetStops
 from models.models import db
 
 import os, uuid
@@ -44,16 +47,21 @@ def add_routes(application):
     api.add_resource(HealthCheck, "/routes/ping")
     api.add_resource(GetTrucks, "/routes/trucks") # GET consultar camiones
     api.add_resource(GetTrucksLocation, "/routes/trucks/location") # GET Consultar ubicación camiones
-    api.add_resource(GetDeliveryLocation, "/routes/<route_id>/location")# GET consultar ubicación pedido
+    api.add_resource(CreateTruck, "/routes/truck")
+    api.add_resource(UpdateTruck, "/routes/truck")
+    api.add_resource(RegisterTruckLocation, "/routes/truck/<truck_id>/location") # POST registrar ubicación
+    api.add_resource(SaveTruckLocation, "/routes/truck/<truck_id>/location") # PUT actualizar ubicación
+
+    api.add_resource(GetDeliveryLocation, "/routes/<order_id>/location")# GET consultar ubicación pedido
+    api.add_resource(GetRoutes, "/routes") # GET consultar rutas
     api.add_resource(GetRouteDetail, "/routes/<route_id>")# GET consultar ruta (Vendedor | camión)
     api.add_resource(CreateRouteDelivery, "/routes/delivery")# POST crear rutas camiones
     api.add_resource(CreateRouteSales, "/routes/seller") # POST crear ruta vendedor
     api.add_resource(UpdateRoute, "/routes/<route_id>/update") # PUT actualizar ruta
     api.add_resource(ConfirmRoute, "/routes/<route_id>/confirm") # PUT confirmar ruta
+    
     api.add_resource(UpdateStop, "/routes/stop/<stop_id>") # POST actualizar parada
-    api.add_resource(RegisterTruckLocation, "/routes/truck/<truck_id>/location") # POST registrar ubicación
-    api.add_resource(SaveTruckLocation, "/routes/truck/<truck_id>/location") # PUT actualizar ubicación
-    api.add_resource(GetRoutes, "/routes") # GET consultar rutas
+    api.add_resource(GetStops, "/routes/stops") # GET consultar todas las paradas
     api.add_resource(GetStopsByCustomer, "/routes/stops/customer/<customer_id>") # GET consultar visitas a cliente
     
 

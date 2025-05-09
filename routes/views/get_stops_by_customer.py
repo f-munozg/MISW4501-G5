@@ -11,7 +11,7 @@ class GetStopsByCustomer(Resource):
         except:
             return {"message": "invalid customer id"}, 400
         
-        stops = db.session.query(RouteStop).filter(RouteStop.customer_id == customer_id).all()
+        stops = db.session.query(RouteStop).filter(RouteStop.customer_id == customer_id, RouteStop.order_id == None).all()
 
         json_stops = StopsJsonSchema(
             many = True,

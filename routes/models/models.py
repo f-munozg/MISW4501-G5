@@ -33,6 +33,7 @@ class RouteStop(db.Model):
     __tablename__ = 'route_stop'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     eta = Column(Float)
+    order_id = Column(UUID(as_uuid=True), nullable=True)
     customer_id = Column(UUID(as_uuid=True), nullable=False)
     route_id = Column(UUID(as_uuid=True), nullable=False)
     observations = Column(String(255))
@@ -45,7 +46,8 @@ class RouteStop(db.Model):
 class Truck(db.Model):
     __tablename__ = 'trucks'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), nullable=False)
+    user_id = Column(UUID(as_uuid=True), nullable=True)
+    warehouse_id = Column(UUID(as_uuid=True))
     capacity = Column(Float, nullable=False)
     location = Column(String(25))
     available = Column(Boolean)
@@ -71,6 +73,7 @@ class StopsJsonSchema(Schema):
     id = fields.UUID()
     eta = fields.Float()
     store = fields.UUID()
+    order_id = fields.UUID()
     customer_id = fields.UUID()
     observations = fields.Str()
     status = fields.Enum(StopStatus)
