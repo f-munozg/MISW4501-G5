@@ -49,6 +49,7 @@ class CreateOrder(Resource):
             return { "message": "invalid reserve to activate"}, 400
         
         for item in order.products:
+            # actualizar fecha de entrega
             # Liberar reserva
             status1, res1 = call_stock_service("/stock/release", {
                 "product_id": str(item.product_id),

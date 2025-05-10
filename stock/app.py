@@ -9,6 +9,7 @@ from views.stock_movements import StockMovement
 from views.stock_release import StockRelease
 from views.stock_reserve import StockReserve
 from views.stock_alert_critical import StockCriticalCheck
+from views.product_rotation import ProductRotationReport
 from models.models import db
 
 import os, uuid
@@ -45,6 +46,7 @@ def add_routes(application):
     api.add_resource(StockReserve, "/stock/reserve")
     api.add_resource(StockRelease, "/stock/release")
     api.add_resource(StockCriticalCheck, "/stock/critical")
+    api.add_resource(ProductRotationReport, "/stock/product_rotation")
 
 def init_db(app):
     db.init_app(app)

@@ -64,6 +64,7 @@ class Order(db.Model):
     date_order = Column(DateTime)
     date_delivery = Column(DateTime)
     status = Column(String(50), nullable=False)
+    order_total = Column(Float, nullable=False, default=0)
 
 class OrderProducts(db.Model):
     __tablename__ = "order_products"
