@@ -51,7 +51,6 @@ class CreateReserve(Resource):
             customer_id = customerId,
             seller_id = sellerId,
             date_order = datetime.today(),
-            date_delivery = datetime.today(),
             status = "reserved"
         )
 

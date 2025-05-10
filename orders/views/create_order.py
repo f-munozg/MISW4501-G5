@@ -1,6 +1,6 @@
 import uuid, os, requests
 from datetime import datetime
-from models.models import db, Order, OrderProducts
+from models.models import db, Order
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
