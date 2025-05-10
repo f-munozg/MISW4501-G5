@@ -14,6 +14,7 @@ from views.get_orders_finished import GetOrdersFinished
 from views.get_products_sold import GetProductsSold
 from views.get_sellers_with_orders import GetSellersWithOrders
 from views.optimize_order import OptimizeOrder
+from views.add_payment import AddPayment
 import os, uuid
 
 def create_app():
@@ -57,6 +58,7 @@ def add_routes(application):
     api.add_resource(GetProductsSold, "/orders/products_sold")
     api.add_resource(GetSellersWithOrders, "/order/sellers_with_orders")
     api.add_resource(OptimizeOrder, "/orders/optimize")
+    api.add_resource(AddPayment, "/order/add_payment")
 
 if __name__ == "__main__":
     application = create_app()

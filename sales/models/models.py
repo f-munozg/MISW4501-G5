@@ -66,6 +66,7 @@ class Order(db.Model):
     status = Column(String(50), nullable=False)
     order_total = Column(Float, nullable=False, default=0)
     route_id = Column(UUID(as_uuid=True), nullable=True)
+    status_payment = Column(String(50), nullable=False, default="")
 
 class OrderProducts(db.Model):
     __tablename__ = "order_products"

@@ -5,6 +5,7 @@ from sqlalchemy import Enum as SQLAlchemyEnum
 from marshmallow import Schema, fields
 import uuid
 import enum
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -45,7 +46,7 @@ class Order(db.Model):
     status = Column(String(50), nullable=False)
     route_id = Column(UUID(as_uuid=True), nullable=True)
     order_total = Column(Float, nullable=False, default=0)
-
+    status_payment = Column(String(50), nullable=False, default="")
     products = db.relationship("OrderProducts", backref="order", lazy="joined", cascade="all, delete-orphan")
 
 class OrderProducts(db.Model):
@@ -59,6 +60,18 @@ class OrderProducts(db.Model):
     __table_args__ = (
         db.PrimaryKeyConstraint('order_id', 'product_id'),
     )
+
+class Payments(db.Model):
+    __tablename__ = "payments"
+
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    order_id = db.Column(UUID(as_uuid=True), db.ForeignKey('orders.id'), nullable=False)
+    total = db.Column(Float, nullable=False)
+    payment = db.Column(Float, nullable=False)
+    balance = db.Column(Float, nullable=False)
+    payment_date = db.Column(DateTime, nullable=False, default=datetime.utcnow)
+        
+    order = db.relationship("Order", backref="payments")
 
 class OrderJsonSchema(Schema):
     id = fields.UUID()
