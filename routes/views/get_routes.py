@@ -6,19 +6,21 @@ from flask_restful import Resource
 
 class GetRoutes(Resource):
     def get(self):
-        type = request.args.get("type")
+        route_type = request.args.get("type")
         assignee_id = request.args.get("assignee_id")
         status = request.args.get("status")
 
         query = []
 
-        if type and type != "":
-            if not type in RouteType:
+        if route_type and route_type != "":
+            values = set(item.value for item in RouteType)
+            if not route_type in values:
                 return {"message": "invalid route type"}, 400
-            query.append(Route.type == RouteType(type))
+            query.append(Route.type == RouteType(route_type))
 
         if status and status != "":
-            if not status in RouteStatus:
+            values = set(item.value for item in RouteStatus)
+            if not status in values:
                 return {"message": "invalid route status"}, 400
             query.append(Route.status == RouteStatus(status))
 

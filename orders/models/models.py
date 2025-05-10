@@ -68,3 +68,4 @@ class OrderJsonSchema(Schema):
     date_delivery = fields.DateTime()
     status = fields.Str()
     order_total = fields.Float()
+    order_products = fields.Nested(OrderProducts)

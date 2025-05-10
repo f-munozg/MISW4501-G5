@@ -1,5 +1,5 @@
 import uuid, os, requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from models.models import db, Order
 from flask import request
 from flask_restful import Resource
@@ -74,7 +74,7 @@ class CreateOrder(Resource):
                 return {"message": "Failed to record stock movement", "details": res2}, status2
 
         order.status = "created"
-
+        order.date_delivery = datetime.now() + timedelta(order.date_delivery.day)
         try:
             db.session.commit()
         except IntegrityError:

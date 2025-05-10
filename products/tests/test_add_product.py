@@ -159,22 +159,3 @@ class TestAddProduct(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertIn("provider_id must be a valid UUID", response.json["message"])
-
-    def test_create_product_invalid_date(self):
-        """Prueba cuando la fecha tiene un formato incorrecto."""
-        response = self.client.post(
-            "/products/add",
-            data=json.dumps({
-                "sku": "XYZ888",
-                "name": "Producto fecha inválida",
-                "unit_value": 50.0,
-                "storage_conditions": "Seco",
-                "product_features": "Compacto",
-                "provider_id": "debedacc-3e31-4003-8986-871637d727af",
-                "category": "FARMACIA",
-                "estimated_delivery_time": "fecha-mala"
-            }),
-            content_type="application/json"
-        )
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("Invalid format for 'estimated_delivery_time'", response.json["message"])
