@@ -1,6 +1,6 @@
 import uuid, os, requests
 from datetime import datetime
-from models.models import db, Order, OrderProducts
+from models.models import db, Order, OrderProducts, Product
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
@@ -64,10 +64,14 @@ class CreateReserve(Resource):
                 "message": "missing field"
             }, 409
 
+        order_total = 0
         for product in data.get("products"):
             try:
                 product_id = uuid.UUID(product["id"])
                 quantity = int(product["quantity"])
+                item = db.session.query(Product).filter(Product.id == product_id).first()
+                unit_value = item.unit_value
+                order_total = round(order_total + (unit_value*quantity))
             except:
                 db.session.rollback()
                 return {"message": "invalid product or quantity"}, 400
@@ -89,7 +93,8 @@ class CreateReserve(Resource):
                 warehouse_id = uuid.UUID(resp["warehouse_id"])
             )
             db.session.add(reserveProduct)
-        
+
+        reserve.order_total = order_total
         db.session.commit()
 
         return {
