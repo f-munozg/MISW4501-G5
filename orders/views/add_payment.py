@@ -23,43 +23,35 @@ class AddPayment(Resource):
         except ValueError:
             return {"message": "ID de orden inválido"}, 400
         
-        # Buscar la orden
         order = Order.query.get(order_id)
         if not order:
             return {"message": "Orden no encontrada"}, 404
         
-        # Validar si la orden ya está pagada
-        if order.status == "Pagado":
+        if order.status == "paid":
             return {
                 "message": "La orden ya está completamente pagada",
             }, 400
         
-        # Extraer monto de la imagen
         payment_amount = extract_amount_from_image(data['receipt_image'])
         if not payment_amount:
             return {"message": "No se pudo determinar el monto pagado"}, 400
         
-         # Validar que el monto sea positivo
         if payment_amount <= 0:
             return {
                 "message": "El monto pagado debe ser mayor a cero"
             }, 400
         
-        # Calcular total pagado hasta ahora (incluyendo este pago)
         total_paid = db.session.query(
             db.func.coalesce(db.func.sum(Payments.payment), 0.0)
         ).filter(Payments.order_id == order_id).scalar() + payment_amount
         
-        # Validar que no exceda el total
         if total_paid > order.order_total:
             return {
                 "message": f"El pago excede el total de la orden. Total: {order.order_total}, Pagado: {total_paid}"
             }, 400
         
-         # Calcular saldo pendiente
         remaining_balance = order.order_total - total_paid
         
-        # Crear registro de pago parcial
         new_payment = Payments(
             order_id=order_id,
             total=order.order_total,
@@ -70,15 +62,13 @@ class AddPayment(Resource):
         try:
             db.session.add(new_payment)
             
-            # Actualizar estado de la orden
             if total_paid == order.order_total:
-                order.status_payment = "Pagado"
+                order.status_payment = "paid"
             elif total_paid > 0:
-                order.status_payment = "Pago parcial"
+                order.status_payment = "partial payment"
             
             db.session.commit()
             
-            # Obtener historial de pagos para esta orden
             payment_history = Payments.query.filter_by(order_id=order_id)\
                 .order_by(Payments.payment_date.asc()).all()
 

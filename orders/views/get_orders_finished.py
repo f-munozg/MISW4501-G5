@@ -12,7 +12,7 @@ class GetOrdersFinished(Resource):
         query = db.session.query(Order).filter(
             or_(
                 Order.status.ilike("created"),
-                Order.status.ilike("pagado")
+                Order.status.ilike("paid")
             )
         )
 

@@ -58,7 +58,7 @@ class TestCreatePayment(unittest.TestCase):
                 "seller_id": "seller123",
                 "date_order": "2024-01-01",
                 "date_delivery": "2024-01-10",
-                "status": "Pagado"
+                "status": "paid"
             }
         )
 
