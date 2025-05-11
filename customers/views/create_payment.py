@@ -54,7 +54,7 @@ class CreatePayment(Resource):
         )
         
         order_data = order_response.json()
-        order_data["status"] = "Pagado"
+        order_data["status"] = "paid"
         order_update_url = f"{order_url_base}/orders/updateStatus"
         update_response = requests.put(order_update_url, json=order_data)
 
