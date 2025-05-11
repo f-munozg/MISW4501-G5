@@ -51,7 +51,6 @@ class CreateReserve(Resource):
             customer_id = customerId,
             seller_id = sellerId,
             date_order = datetime.today(),
-            date_delivery = datetime.today(),
             status = "reserved"
         )
 
@@ -65,16 +64,20 @@ class CreateReserve(Resource):
             }, 409
 
         order_total = 0
+        delivery_date = datetime(1970,1,1,0,0)
         for product in data.get("products"):
             try:
                 product_id = uuid.UUID(product["id"])
                 quantity = int(product["quantity"])
-                item = db.session.query(Product).filter(Product.id == product_id).first()
-                unit_value = item.unit_value
-                order_total = round(order_total + (unit_value*quantity))
             except:
                 db.session.rollback()
                 return {"message": "invalid product or quantity"}, 400
+
+            item = db.session.query(Product).filter(Product.id == product_id).first()
+            unit_value = item.unit_value
+            order_total = round(order_total + (unit_value*quantity))
+            if type(item.estimated_delivery_time) == datetime:
+                delivery_date = max([delivery_date, item.estimated_delivery_time])
 
             # Llamar a stock para reservar
             status, resp = call_stock_service("/stock/reserve", {
@@ -95,6 +98,7 @@ class CreateReserve(Resource):
             db.session.add(reserveProduct)
 
         reserve.order_total = order_total
+        reserve.date_delivery = delivery_date
         db.session.commit()
 
         return {

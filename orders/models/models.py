@@ -44,6 +44,7 @@ class Order(db.Model):
     date_order = Column(DateTime)
     date_delivery = Column(DateTime)
     status = Column(String(50), nullable=False)
+    route_id = Column(UUID(as_uuid=True), nullable=True)
     order_total = Column(Float, nullable=False, default=0)
     status_payment = Column(String(50), nullable=False, default="pending")
     products = db.relationship("OrderProducts", backref="order", lazy="joined", cascade="all, delete-orphan")
@@ -81,6 +82,12 @@ class OrderJsonSchema(Schema):
     status = fields.Str()
     order_total = fields.Float()
     status_payment = fields.Str()
+
+class OrderProductsJsonSchema(Schema):
+    order_id = fields.UUID()
+    product_id = fields.UUID()
+    quantity = fields.Float()
+    warehouse_id = fields.UUID()
 
 class PaymentSummarySchema(Schema):
     total_amount = fields.Float()

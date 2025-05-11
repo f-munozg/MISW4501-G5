@@ -1,6 +1,6 @@
 import uuid, os, requests
-from datetime import datetime
-from models.models import db, Order, OrderProducts
+from datetime import datetime, timedelta
+from models.models import db, Order
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
@@ -74,7 +74,8 @@ class CreateOrder(Resource):
                 return {"message": "Failed to record stock movement", "details": res2}, status2
 
         order.status = "created"
-
+        if type(order.date_delivery) == datetime:
+            order.date_delivery = datetime.now() + timedelta(order.date_delivery.day)
         try:
             db.session.commit()
         except IntegrityError:

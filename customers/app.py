@@ -7,6 +7,7 @@ from views.get_customers import GetCustomers
 from views.update_customer import UpdateCustomer
 from views.assign_seller import AssignSeller
 from views.create_payment import CreatePayment
+from views.customers_by_seller import CustomersBySeller
 from models.models import db
 
 import os, uuid
@@ -46,6 +47,7 @@ def add_routes(application):
     api.add_resource(UpdateCustomer, "/customers/<user_id>") # PUT
     api.add_resource(AssignSeller, "/customers/assign_seller") # POST
     api.add_resource(CreatePayment, "/customers/payment") # POST
+    api.add_resource(CustomersBySeller, "/customers/seller/<seller_id>") # GET
 
 if __name__ == "__main__":
     application = create_app()

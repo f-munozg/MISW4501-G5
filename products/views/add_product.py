@@ -3,8 +3,9 @@ from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
 from models.models import db, Product, ProductCategory
-import uuid
+import uuid, random
 from datetime import datetime
+
 
 class AddProduct(Resource):
     # @jwt_required()
@@ -43,14 +44,9 @@ class AddProduct(Resource):
         except ValueError:
             return {"message": "provider_id must be a valid UUID"}, 400
 
-        # Parsear fecha opcional
-        estimated_delivery_time = None
-        if data.get("estimated_delivery_time"):
-            try:
-                estimated_delivery_time = datetime.fromisoformat(data["estimated_delivery_time"])
-            except ValueError:
-                return {"message": "Invalid format for 'estimated_delivery_time'. Use ISO format (YYYY-MM-DDTHH:MM:SS)."}, 400
-
+        days_to_deliver = random.randint(1,5)
+        estimated_delivery_time = datetime(1970, 1, days_to_deliver, 0, 0)
+        
         product = Product(
             sku=data["sku"],
             name=data["name"],
