@@ -17,7 +17,7 @@ class GetSellersWithOrders(Resource):
             and_(
                 Order.date_order >= fecha_inicio,
                 Order.date_order <= fecha_fin,
-                Order.status.in_(["created", "pagado"])
+                Order.status.in_(["created", "paid"])
             )
         )
 
