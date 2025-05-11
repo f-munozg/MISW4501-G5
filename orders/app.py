@@ -7,11 +7,14 @@ from views.create_order import CreateOrder
 from views.create_reserve import CreateReserve
 from views.get_customer_orders import GetCustomerOrders
 from views.get_order import GetOrder
+from views.get_detailed_order import GetDetailedOrder
 from views.get_orders import GetOrders
 from views.update_order import UpdateOrderStatus
 from views.get_orders_finished import GetOrdersFinished
 from views.get_products_sold import GetProductsSold
 from views.get_sellers_with_orders import GetSellersWithOrders
+from views.optimize_order import OptimizeOrder
+from views.add_payment import AddPayment
 import os, uuid
 
 def create_app():
@@ -47,12 +50,15 @@ def add_routes(application):
     api.add_resource(GetCustomerOrders, "/orders/user/<user_id>")
     api.add_resource(GetOrders, "/orders")
     api.add_resource(GetOrder, "/orders/<order_id>")
+    api.add_resource(GetDetailedOrder, "/orders/<order_id>/detail")
     api.add_resource(CreateOrder, "/orders/order")
     api.add_resource(CreateReserve, "/orders/reserve")
     api.add_resource(UpdateOrderStatus, "/orders/updateStatus")
     api.add_resource(GetOrdersFinished, "/orders/orders_finished")
     api.add_resource(GetProductsSold, "/orders/products_sold")
     api.add_resource(GetSellersWithOrders, "/order/sellers_with_orders")
+    api.add_resource(OptimizeOrder, "/orders/optimize")
+    api.add_resource(AddPayment, "/order/add_payment")
 
 if __name__ == "__main__":
     application = create_app()

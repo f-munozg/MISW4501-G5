@@ -5,6 +5,7 @@ from sqlalchemy import Enum as SQLAlchemyEnum
 from marshmallow import Schema, fields
 import uuid
 import enum
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -43,7 +44,9 @@ class Order(db.Model):
     date_order = Column(DateTime)
     date_delivery = Column(DateTime)
     status = Column(String(50), nullable=False)
-
+    route_id = Column(UUID(as_uuid=True), nullable=True)
+    order_total = Column(Float, nullable=False, default=0)
+    status_payment = Column(String(50), nullable=False, default="pending")
     products = db.relationship("OrderProducts", backref="order", lazy="joined", cascade="all, delete-orphan")
 
 class OrderProducts(db.Model):
@@ -58,6 +61,18 @@ class OrderProducts(db.Model):
         db.PrimaryKeyConstraint('order_id', 'product_id'),
     )
 
+class Payments(db.Model):
+    __tablename__ = "payments"
+
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    order_id = db.Column(UUID(as_uuid=True), db.ForeignKey('orders.id'), nullable=False)
+    total = db.Column(Float, nullable=False)
+    payment = db.Column(Float, nullable=False)
+    balance = db.Column(Float, nullable=False)
+    payment_date = db.Column(DateTime, nullable=False, default=datetime.utcnow)
+        
+    order = db.relationship("Order", backref="payments")
+
 class OrderJsonSchema(Schema):
     id = fields.UUID()
     customer_id = fields.UUID()
@@ -65,3 +80,17 @@ class OrderJsonSchema(Schema):
     date_order = fields.DateTime()
     date_delivery = fields.DateTime()
     status = fields.Str()
+    order_total = fields.Float()
+    status_payment = fields.Str()
+
+class OrderProductsJsonSchema(Schema):
+    order_id = fields.UUID()
+    product_id = fields.UUID()
+    quantity = fields.Float()
+    warehouse_id = fields.UUID()
+
+class PaymentSummarySchema(Schema):
+    total_amount = fields.Float()
+    paid_amount = fields.Float()
+    pending_balance = fields.Float()
+    last_payment_date = fields.DateTime(allow_none=True)

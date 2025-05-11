@@ -1,10 +1,11 @@
-import unittest
+import unittest, os
 from flask import Flask
 from flask_restful import Api
 from views.health_check import HealthCheck 
 
 class HealthCheckTestCase(unittest.TestCase):
     def setUp(self):
+        os.environ["TESTING"] = "true"
         app = Flask(__name__)
         api = Api(app)
         api.add_resource(HealthCheck, '/health')
@@ -17,7 +18,3 @@ class HealthCheckTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
         self.assertEqual(response.data.decode(), '"pong"\n')
-
-
-if __name__ == '__main__':
-    unittest.main()

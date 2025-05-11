@@ -1,7 +1,6 @@
-import uuid
+import uuid, time, random
+from datetime import datetime
 import pandas as pd
-import io
-import time
 from flask import request, jsonify
 from flask_restful import Resource
 from models.models import db, Product, ProductCategory
@@ -65,6 +64,9 @@ class FileUploadProducts(Resource):
                 return {
                     "message": f"Invalid category '{row['category']}'. Valid options are: {', '.join(valid)}"
                 }, 400
+            
+            days_to_deliver = random.randint(1,5)
+            estimated_delivery_time = datetime(1970, 1, days_to_deliver, 0, 0)
 
             try:
                 product = Product(
@@ -74,7 +76,7 @@ class FileUploadProducts(Resource):
                     storage_conditions=row["storage_conditions"],
                     product_features=row["product_features"],
                     unit_value=float(row["unit_value"]),
-                    estimated_delivery_time=pd.to_datetime(row["estimated_delivery_time"]),
+                    estimated_delivery_time=estimated_delivery_time,
                     photo=row["photo"],
                     provider_id=provider_id,
                     category=category
