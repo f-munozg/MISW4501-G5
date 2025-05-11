@@ -74,7 +74,8 @@ class CreateOrder(Resource):
                 return {"message": "Failed to record stock movement", "details": res2}, status2
 
         order.status = "created"
-        order.date_delivery = datetime.now() + timedelta(order.date_delivery.day)
+        if type(order.date_delivery) == datetime:
+            order.date_delivery = datetime.now() + timedelta(order.date_delivery.day)
         try:
             db.session.commit()
         except IntegrityError:

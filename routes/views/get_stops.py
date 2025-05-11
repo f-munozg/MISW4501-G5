@@ -14,4 +14,4 @@ class GetStops(Resource):
 
         return {
             "stops": json_stops
-        }
+        }, 200

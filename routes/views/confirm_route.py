@@ -17,14 +17,14 @@ class ConfirmRoute(Resource):
             return { "message": "route not found"}, 404
         
         stops = db.session.query(RouteStop).filter(RouteStop.id == route.id).all()
-
+        
         if len(stops) <= 0:
             route.status = "Completada"
-            db.commit()
-            return {"message": "empty route"}, 204
+            db.session.commit()
+            return {"message": "route already confirmed"}, 200
 
         route.status = "Confirmada"
-        db.commit()
+        db.session.commit()
         
         return {
             "message": "route confirmed successfully"
