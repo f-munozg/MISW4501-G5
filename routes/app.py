@@ -17,6 +17,7 @@ from views.get_stops_by_customer import GetStopsByCustomer
 from views.create_truck import CreateTruck
 from views.update_truck import UpdateTruck
 from views.get_stops import GetStops
+from views.register_visit import RegisterVisit
 from models.models import db
 
 import os, uuid
@@ -50,7 +51,7 @@ def add_routes(application):
     api.add_resource(CreateTruck, "/routes/truck")
     api.add_resource(UpdateTruck, "/routes/truck")
     api.add_resource(RegisterTruckLocation, "/routes/truck/<truck_id>/location") # POST registrar ubicación
-    api.add_resource(SaveTruckLocation, "/routes/truck/<truck_id>/location") # PUT actualizar ubicación
+    api.add_resource(SaveTruckLocation, "/routes/truck/location") # POST actualizar ubicación
 
     api.add_resource(GetDeliveryLocation, "/routes/<order_id>/location")# GET consultar ubicación pedido
     api.add_resource(GetRoutes, "/routes") # GET consultar rutas
@@ -61,6 +62,7 @@ def add_routes(application):
     api.add_resource(ConfirmRoute, "/routes/<route_id>/confirm") # PUT confirmar ruta
     
     api.add_resource(UpdateStop, "/routes/stop/<stop_id>") # POST actualizar parada
+    api.add_resource(RegisterVisit, "/routes/stop/store") # POST registrar visita
     api.add_resource(GetStops, "/routes/stops") # GET consultar todas las paradas
     api.add_resource(GetStopsByCustomer, "/routes/stops/customer/<customer_id>") # GET consultar visitas a cliente
     

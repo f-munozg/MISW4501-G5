@@ -21,6 +21,7 @@ class RouteStatus(enum.Enum):
 class StopStatus(enum.Enum):
     PENDIENTE = "Pendiente"
     COMPLETADA = "Completada"
+    FALLIDA = "Fallida"
 
 class StopResult(enum.Enum):
     RECIBIDO = "Recibido" # Parada Entrega

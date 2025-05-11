@@ -1,8 +1,8 @@
-import math
+import math, os, requests
 from datetime import datetime
 from flask_restful import Resource
 from flask import request
-from models.models import db, Route, RouteStop, Truck, RouteType, RouteStatus, StopStatus
+from models.models import db, Route, RouteStop, Truck, RouteType, RouteStatus, StopStatus, StopsJsonSchema
 
 class CreateRouteDelivery(Resource):
     def post(self):
@@ -28,11 +28,10 @@ class CreateRouteDelivery(Resource):
             return {
                 "message": "no available trucks"
             }, 409
-        print('orders:', len(orders))
+        
         i = 0
+        stops = []
         for t in trucks:
-            print('i:', i)
-            print('capacity:', t.capacity)
             limit = int(i+t.capacity)
             if limit >= len(orders):
                 limit = len(orders)
@@ -46,7 +45,6 @@ class CreateRouteDelivery(Resource):
             )
             db.session.add(route)
             db.session.commit()
-            print('gets -> ',i, ':', limit )
             truck_orders = orders[i:limit]
             for order in truck_orders:
                 stop = RouteStop(
@@ -58,11 +56,31 @@ class CreateRouteDelivery(Resource):
                     optional = False
                 )
                 db.session.add(stop)
+                stops.append(stop)
+                t.available = False
+
+                body = {
+                    "order_id": order.get("order_id"),
+                    "status": "in_transit"
+                }
+                url_orders = os.environ.get("ORDERS_URL", "http://192.168.20.11:5001")
+                url = f"{url_orders}/orders/updateStatus"
+                headers = {} #"Authorization": self.token}
+                response = requests.request("PUT", url, headers=headers, json=body )
+
+                if response.status_code != 200:
+                    return response.json(), response.status_code
+
             i = limit
-            print('i again:', i)
             if i >= len(orders):
                 break
 
         db.session.commit()
 
-        return "pong", 200
+        json_stops = StopsJsonSchema(many=True).dump(stops)
+
+        return {
+            "message": "route created",
+            "id": str(route.id),
+            "stops": json_stops
+        }, 200

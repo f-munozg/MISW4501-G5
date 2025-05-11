@@ -64,9 +64,10 @@ class Order(db.Model):
     date_order = Column(DateTime)
     date_delivery = Column(DateTime)
     status = Column(String(50), nullable=False)
-    order_total = Column(Float, nullable=False, default=0)
     route_id = Column(UUID(as_uuid=True), nullable=True)
+    order_total = Column(Float, nullable=False, default=0)
     status_payment = Column(String(50), nullable=False, default="")
+    products = db.relationship("OrderProducts", backref="order", lazy="joined", cascade="all, delete-orphan")
 
 class OrderProducts(db.Model):
     __tablename__ = "order_products"
