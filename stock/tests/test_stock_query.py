@@ -70,6 +70,3 @@ class TestStockyQuery(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["total"], 0)
         self.assertEqual(response.json["results"], [])
-
-if __name__ == "__main__":
-    unittest.main()

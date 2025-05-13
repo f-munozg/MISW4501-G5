@@ -79,7 +79,3 @@ class TestProductsWithStock(unittest.TestCase):
         self.assertEqual(data["offset"], 1)
         self.assertEqual(data["total"], 3)
         self.assertEqual(data["results"][0]["sku"], "SKU456")
-
-
-if __name__ == '__main__':
-    unittest.main()
