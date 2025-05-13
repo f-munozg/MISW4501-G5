@@ -10,8 +10,6 @@ class GetUsersMovements(Resource):
                 .filter(Role.name.in_(role_names))
                 .all())       
 
-        print(users)
-
         json_users = UsersJsonSchema(
             many=True
         ).dump(users)

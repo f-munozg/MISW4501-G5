@@ -34,8 +34,6 @@ class TestReporteVentas(unittest.TestCase):
         mock_procesar.return_value = [{"producto": "A", "vendedor": "V1", "unidades_vendidas": 10, "ingresos": 200}]
         response = self.client.get("/reports/reporte_ventas_csv?fecha_inicio=2025-01-01&fecha_fin=2025-04-01")
 
-        print("RESPONSE DATA:", response.data)
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.mimetype, "text/csv")
 

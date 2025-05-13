@@ -93,3 +93,11 @@ class Warehouse(db.Model):
 class WarehouseJsonSchema(Schema):
     id = fields.UUID()
     name = fields.Str()
+
+
+class StockJsonSchema(Schema):
+    id = fields.UUID()
+    product_id = fields.UUID()
+    warehouse_id = fields.UUID()
+    quantity = fields.Integer()
+    reserved_quantity = fields.Integer()
