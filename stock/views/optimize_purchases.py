@@ -1,60 +1,101 @@
+import uuid
 from flask import request
 from flask_restful import Resource
-from flask_sqlalchemy import func
 from datetime import datetime, timedelta
 from models.models import db, Product, Stock, HistoryStockLog, StockMovementType
 
 class OptimizePurchases(Resource):
 
     def get(self):
-        product_id = request.get("product_id")
-        provider_id = request.get("provider_id")
+        product_id = request.args.get("product_id")
+        provider_id = request.args.get("provider_id")
 
         # validate ids
         
         query = []
 
-        product = db.session.query(Product).filter(Product.id == product_id).first()
-        if not product:
-            return {}, 404
+        if product_id and product_id != "":
+            try:
+                uuid.UUID(product_id)
+            except:
+                return {"message": "invalid product id"}, 400
+            
+            query.append(Product.id == product_id)
         
-        provider_products = db.session.query(Product).filter(Product.provider_id == provider_id).all()
-
-        if len(provider_products) == 0:
-            return {}, 404
+        if provider_id and provider_id != "":
+            try:
+                uuid.UUID(provider_id)
+            except:
+                return {"message": "invalid provider id"}, 400
+            
+            query.append(Product.provider_id == provider_id)
         
 
-        products = db.session.query(Product).all()
-        # get stock by product
-        products = [dic["id"] for dic in products]
-
+        products = db.session.query(Product).filter(*query).all()
+        if len(products) == 0:
+            return {"message": "no products found"}, 404
+        
+        
+        buy = []
         for product in products:
-            stock = db.session.query(Stock).filter(Stock.product_id == product.id).all()
+            # get stock by product
+            stock = db.session.query(db.func.sum(Stock.quantity).label("quantity"), 
+                                     db.func.sum(Stock.threshold_stock).label("threshold"),
+                                     Stock.product_id).filter(Stock.product_id == product.id
+                                                              ).group_by(Stock.product_id).first()
 
             #get last input
             end_date = datetime.now()
             start_date = end_date - timedelta(30)
-            movements = db.session.query(HistoryStockLog.movement_type, func.sum(HistoryStockLog.quantity).label('total')).filter(
-                HistoryStockLog.product_id == product_id, 
+            movements = db.session.query(HistoryStockLog.movement_type, db.func.sum(HistoryStockLog.quantity).label('total')).filter(
+                HistoryStockLog.product_id == product.id, 
                 HistoryStockLog.timestamp.between(start_date, end_date)
                 ).group_by(HistoryStockLog.movement_type).all()
 
-            
+            inputs = 0
+            outputs = 0
+            for movement in movements:
+                if movement.movement_type == StockMovementType.INGRESO:
+                    inputs = movement.total
+                else:
+                    outputs = movement.total
 
+            if outputs > inputs:
+                buy.append(
+                    {
+                        "product_name": product.name,
+                        "suggested_qtty": outputs - inputs,
+                        "motive": "Alta demanda previa"
+                    }
+                ) 
 
-            if outs > last in
-                add = last in
-            
-            sum outs last month?
-                if stock < outs last month && 
+                continue
 
+            if stock.quantity < outputs and outputs > inputs:
+                buy.append(
+                    {
+                        "product_name": product.name,
+                        "suggested_qtty": outputs - inputs,
+                        "motive": "Alta demanda esperada"
+                    }
+                ) 
 
+                continue
+
+            if stock.quantity < stock.threshold:
+                buy.append(
+                    {
+                        "product_name": product.name,
+                        "suggested_qtty": outputs - inputs,
+                        "motive": "Stock bajo"
+                    }
+                ) 
+
+                continue
+                    
         
-            -> threshold
-                -> purchase last months avg out
-            -> outs vs in
-                -> purchase difference in outs last month - stock
-            
-
+        return {
+            "suggested_purchases": buy
+            }, 200
 
         
