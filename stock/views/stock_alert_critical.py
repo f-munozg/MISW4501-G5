@@ -50,8 +50,6 @@ class StockCriticalCheck(Resource):
                 else:
                     suggested_action = "Generar orden de compra al proveedor"
 
-                # print(f"[NOTIFICACIÓN] {alert_msg} | Acción sugerida: {suggested_action}")
-
                 response_data.append({
                     "product_id": str(stock.product_id),
                     "product_name": stock.product.name,

@@ -18,7 +18,6 @@ class GetDetailedOrder(Resource):
             return {"message": "invalid order id"}, 400
 
         order = db.session.query(Order).filter_by(id=order_id).first()
-        print('order:', order)
         if not order:
             return {
                 "message": "order not found"
