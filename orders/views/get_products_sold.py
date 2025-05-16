@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload
 
 class GetProductsSold(Resource):
     def get(self):
-        product_id = request.args.get("product_id")
+        product_id = request.args.get("producto")
         fecha_inicio = request.args.get("fecha_inicio")
         fecha_fin = request.args.get("fecha_fin")
 

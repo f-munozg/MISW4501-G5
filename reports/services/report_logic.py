@@ -14,9 +14,12 @@ from dateutil import parser
 url_orders = os.environ.get("ORDERS_URL", "http://localhost:5001")
 url_sellers = os.environ.get("SELLERS_URL", "http://localhost:5007")
 
-API_ORDERS_FINISHED = f"{url_orders}/orders/orders_finished"
-API_PRODUCTS_ORDERS = f"{url_orders}/orders/products_sold"
-API_SELLERS_ORDERS = f"{url_orders}/order/sellers_with_orders"
+# API_ORDERS_FINISHED = f"{url_orders}/orders/orders_finished"
+# API_PRODUCTS_ORDERS = f"{url_orders}/orders/products_sold"
+# API_SELLERS_ORDERS = f"{url_orders}/order/sellers_with_orders"
+API_ORDERS_FINISHED = f"http://192.168.20.11:5000/orders/orders_finished"
+API_PRODUCTS_ORDERS = f"http://192.168.20.11:5000/orders/products_sold"
+API_SELLERS_ORDERS = f"http://192.168.20.11:5000/order/sellers_with_orders"
 API_SELLERS = f"{url_sellers}/sellers/sellers_by_ids"
 
 # --- Funciones para obtener datos externos ---
@@ -37,6 +40,7 @@ def obtener_vendedores(seller_ids):
     return requests.post(API_SELLERS, json={"ids": seller_ids}).json()
 
 def procesar_reporte(fecha_inicio, fecha_fin, producto=None, vendedor=None):
+    resultado = []
     params = {
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin
@@ -49,13 +53,22 @@ def procesar_reporte(fecha_inicio, fecha_fin, producto=None, vendedor=None):
     ventas = obtener_ventas(params)
     ordenes = ventas.get("orders", []) if ventas else []
 
-    seller_ids = list({orden["seller_id"] for orden in ordenes if "seller_id" in orden})
+    if len(ordenes) == 0:
+        return {"message": "No se encontraron ventas en este rango de fechas"}, 404
 
     productos_data = obtener_productos(params)
     productos_lista = productos_data.get("productos", []) if productos_data else []
 
+    if len(productos_lista) == 0:
+        return {"message": "No se encontraron ventas para este producto"}, 404
+
+    seller_ids = list({orden["seller_id"] for orden in ordenes if "seller_id" in orden})
+
     vendedores_lista = obtener_vendedores(seller_ids)
     vendedores_data = vendedores_lista.get("vendedores", []) if vendedores_lista else []
+
+    if len(vendedores_lista) == 0:
+        return {"message": "No se encontraron ventas para este vendedor"}, 404
 
     productos_map = {p["id"]: p for p in productos_lista}
     vendedores_map = {v["id"]: v for v in vendedores_data}
@@ -95,8 +108,7 @@ def procesar_reporte(fecha_inicio, fecha_fin, producto=None, vendedor=None):
             agrupado[clave]["unidades_vendidas"] += cantidad
             agrupado[clave]["ingresos"] += cantidad * valor_unitario
             agrupado[clave]["fechas"].append(fecha)
-
-    resultado = []
+    
     for (prod_id, vend_id), datos in agrupado.items():
         resultado.append({
             "producto": productos_map.get(prod_id, {}).get("name", prod_id),
