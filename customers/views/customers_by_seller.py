@@ -24,6 +24,12 @@ class CustomersBySeller(Resource):
             return {
                 "message": "multiple active routes"
             }, 500
+        
+        if len(routes) == 0:
+            return {
+                "message": "no active route found"
+            }, 200
+        
         route_id = routes[0]["id"]
         
         url = f"{url_routes}/routes/{route_id}"
