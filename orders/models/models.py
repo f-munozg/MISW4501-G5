@@ -20,6 +20,17 @@ class ProductCategory(enum.Enum):
     JUGUETE = "Juguete"
     HOGAR = "Hogar"
 
+class PQRSType(enum.Enum):
+    PETICION = 'peticion'
+    QUEJA = 'queja'
+    RECLAMO = 'reclamo'
+    SUGERENCIA = 'sugerencia'
+
+class PQRStatus(enum.Enum):
+    ABIERTO = 'abierto'
+    EN_PROCESO = 'en_proceso'
+    CERRADO = 'cerrado'
+
 class Product(db.Model):
     __tablename__ = "products"
 
@@ -73,6 +84,21 @@ class Payments(db.Model):
         
     order = db.relationship("Order", backref="payments")
 
+class PQR(db.Model):
+    __tablename__ = "pqrs"
+    
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    type = db.Column(SQLAlchemyEnum(PQRSType), nullable=False)
+    title = db.Column(String(100), nullable=False)
+    description = db.Column(Text, nullable=False)
+    amount = db.Column(Float, nullable=True)
+    status = db.Column(SQLAlchemyEnum(PQRStatus), default=PQRStatus.ABIERTO)
+    customer_id = db.Column(UUID(as_uuid=True), nullable=False)
+    seller_id = db.Column(UUID(as_uuid=True))
+    order_id = db.Column(UUID(as_uuid=True), db.ForeignKey('orders.id'), nullable=False) 
+    created_at = db.Column(DateTime, default=db.func.now())
+    updated_at = db.Column(DateTime, default=db.func.now(), onupdate=db.func.now())
+
 class OrderJsonSchema(Schema):
     id = fields.UUID()
     customer_id = fields.UUID()
@@ -94,3 +120,23 @@ class PaymentSummarySchema(Schema):
     paid_amount = fields.Float()
     pending_balance = fields.Float()
     last_payment_date = fields.DateTime(allow_none=True)
+
+class PQRJsonSchema(Schema):
+    id = fields.UUID()
+    type = fields.Method("get_type_value")
+    title = fields.Str()
+    description = fields.Str()
+    status = fields.Method("get_status_value")
+    customer_id = fields.UUID()
+    seller_id = fields.UUID()
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
+
+    def get_type_value(self, obj):
+        return obj.type.value if obj.type else None
+    
+    def get_status_value(self, obj):
+        return obj.status.value if obj.status else None
+
+pqr_schema = PQRJsonSchema()
+pqrs_schema = PQRJsonSchema(many=True)

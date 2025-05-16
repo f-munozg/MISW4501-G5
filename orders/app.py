@@ -15,6 +15,8 @@ from views.get_products_sold import GetProductsSold
 from views.get_sellers_with_orders import GetSellersWithOrders
 from views.optimize_order import OptimizeOrder
 from views.add_payment import AddPayment
+from views.pqrs import CustomerPQRS, SellerPQRS, GetPQRById, CreatePQR, UpdatePQR, DeletePQR
+
 import os, uuid
 
 def create_app():
@@ -36,13 +38,7 @@ def create_app():
 
     add_routes(application)
 
-    jwt = JWTManager(application)
     return application
-
-def init_db(app):
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
 
 def add_routes(application):
     api = Api(application)
@@ -56,9 +52,21 @@ def add_routes(application):
     api.add_resource(UpdateOrderStatus, "/orders/updateStatus")
     api.add_resource(GetOrdersFinished, "/orders/orders_finished")
     api.add_resource(GetProductsSold, "/orders/products_sold")
-    api.add_resource(GetSellersWithOrders, "/order/sellers_with_orders")
+    api.add_resource(GetSellersWithOrders, "/orders/sellers_with_orders")
     api.add_resource(OptimizeOrder, "/orders/optimize")
-    api.add_resource(AddPayment, "/order/add_payment")
+    api.add_resource(AddPayment, "/orders/add_payment")
+
+    api.add_resource(CustomerPQRS, "/orders/pqrs/getCustomer")
+    api.add_resource(SellerPQRS, "/orders/pqrs/getSeller")
+    api.add_resource(GetPQRById, '/orders/pqrs/<string:pqr_id>')
+    api.add_resource(CreatePQR, "/orders/pqrs/addPQRS")
+    api.add_resource(UpdatePQR, "/orders/pqrs/updatePQRS/<string:pqr_id>")
+    api.add_resource(DeletePQR, "/orders/pqrs/deletePQRS/<string:pqr_id>")
+    
+def init_db(app):
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
 
 if __name__ == "__main__":
     application = create_app()

@@ -64,7 +64,7 @@ class TestAddPayment(unittest.TestCase):
         }
 
         response = self.client.post(
-            "/order/add_payment",
+            "/orders/add_payment",
             data=json.dumps(payload),
             content_type='application/json'
         )
@@ -82,7 +82,7 @@ class TestAddPayment(unittest.TestCase):
     def test_add_payment_missing_fields(self):
         """Prueba cuando faltan campos obligatorios."""
         response = self.client.post(
-            "/order/add_payment",
+            "/orders/add_payment",
             data=json.dumps({"order_id": self.valid_order_id}),
             content_type="application/json"
         )
@@ -90,7 +90,7 @@ class TestAddPayment(unittest.TestCase):
         self.assertIn("Missing required fields: receipt_image", response.json["message"])
 
         response = self.client.post(
-            "/order/add_payment",
+            "/orders/add_payment",
             data=json.dumps({"receipt_image": self.valid_receipt_image}),
             content_type="application/json"
         )
@@ -104,7 +104,7 @@ class TestAddPayment(unittest.TestCase):
             "receipt_image": self.valid_receipt_image
         }
         response = self.client.post(
-            "/order/add_payment",
+            "/orders/add_payment",
             data=json.dumps(invalid_data),
             content_type="application/json"
         )
@@ -117,7 +117,7 @@ class TestAddPayment(unittest.TestCase):
         mock_order_class.query.get.return_value = None
 
         response = self.client.post(
-            "/order/add_payment",
+            "/orders/add_payment",
             data=json.dumps({
                 "order_id": str(uuid.uuid4()),
                 "receipt_image": "base64dummy=="
@@ -137,7 +137,7 @@ class TestAddPayment(unittest.TestCase):
         mock_order_class.query.get.return_value = mock_order
 
         response = self.client.post(
-            "/order/add_payment",
+            "/orders/add_payment",
             data=json.dumps({
                 "order_id": str(uuid.uuid4()),
                 "receipt_image": "base64dummy=="

@@ -19,7 +19,11 @@ class ReporteVentas(Resource):
 
         try:
             data = procesar_reporte(fecha_inicio, fecha_fin, producto, vendedor)
-            return data, 200
+                        
+            if isinstance(data, tuple) and len(data) > 0 and isinstance(data[0], dict) and 'message' in data[0]:
+                return data[0]['message'], 400
+            else:
+                return data, 200
         except Exception as e:
             return {"error": str(e)}, 500
 
