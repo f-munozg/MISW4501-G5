@@ -30,7 +30,8 @@ class CreateReserveTestCase(unittest.TestCase):
         mock_requests.return_value.status_code = 200
         mock_requests.return_value.json.return_value = {
             "customer": {
-                "id": "1313d313-e1f9-46ff-b616-05a841d5964f"
+                "id": "1313d313-e1f9-46ff-b616-05a841d5964f",
+                "assigned_seller": "1313d313-e1f9-46ff-b616-05a841d5964f"
             }
         }
 
@@ -135,7 +136,8 @@ class CreateReserveTestCase(unittest.TestCase):
         mock_requests.return_value.status_code = 200
         mock_requests.return_value.json.return_value = {
             "customer": {
-                "id": "1313d313-e1f9-46ff-b616-05a841d5964f"
+                "id": "1313d313-e1f9-46ff-b616-05a841d5964f",
+                "assigned_seller": "1313d313-e1f9-46ff-b616-05a841d5964f"
             }
         }
 
