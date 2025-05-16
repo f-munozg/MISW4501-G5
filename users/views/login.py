@@ -1,6 +1,6 @@
 import uuid, hashlib
 from datetime import datetime
-from models.models import db, User, Role, Privilege, Role_Privilege, PrivilegeJsonSchema
+from models.models import db, User, Role, Privilege, Role_Privilege, PrivilegeJsonSchema, Seller
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token
@@ -47,11 +47,19 @@ class LoginUser(Resource):
 
         access_token = create_access_token(identity=str(storedUser.id))
 
-        return {
+        return_json = {
             "message": "login successful",
             "role": role.name,
             "privileges": jsonPrivileges,
             "user_id": str(storedUser.id),
             "access_token": access_token
         
-        }, 200
+        }
+        
+        if role.name == "Vendedor":
+            seller = db.session.query(Seller).filter(Seller.user_id == storedUser.id).first()
+            if seller:
+                return_json["seller_id"] = str(seller.id)
+
+
+        return return_json, 200
