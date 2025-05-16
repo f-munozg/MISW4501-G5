@@ -1,6 +1,8 @@
-import uuid
+import uuid, random
 from flask_restful import Resource
 from models.models import db, Product, Stock
+from models.suggestions import Suggestions
+
 class PurchaseSuggestions(Resource):
     def get(self, user_id):
         if not user_id or user_id == "":
@@ -49,6 +51,6 @@ class PurchaseSuggestions(Resource):
 
         return {
             "products": data,
-            "placement": limit,
-            "purchase": offset
+            "placement": Suggestions.placement[random.randint(0, len(Suggestions.placement)-1)],
+            "purchase": Suggestions.suggestions[random.randint(0, len(Suggestions.suggestions)-1)],
         }, 200
