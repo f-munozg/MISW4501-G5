@@ -38,7 +38,7 @@ class CreateReserve(Resource):
             return response.json(), response.status_code
 
         customerId = response.json()["customer"]["id"]
-        sellerId = data.get("seller_id")
+        sellerId = response.json()["customer"]["assigned_seller"]
 
         previousReserves = db.session.query(Order).filter_by(customer_id=customerId, status="reserved").all()
         

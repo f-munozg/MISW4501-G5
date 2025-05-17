@@ -5,6 +5,7 @@ from views.add_seller import AddSeller
 from views.get_seller import GetSeller
 from views.get_sellers import GetSellers
 from views.get_sellers_by_ids import GetSellersByIds
+from views.log_event import LogEvent
 from models.models import db
 
 import os, uuid
@@ -36,6 +37,7 @@ def add_routes(application):
     api.add_resource(GetSeller, "/sellers/seller")
     api.add_resource(GetSellers, "/sellers")
     api.add_resource(GetSellersByIds, "/sellers/sellers_by_ids")
+    api.add_resource(LogEvent, "/sellers/log_event")
 
 def init_db(app):
     db.init_app(app)

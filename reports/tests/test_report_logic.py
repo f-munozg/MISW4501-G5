@@ -48,8 +48,8 @@ class TestProcesarReporte(unittest.TestCase):
         mock_productos.return_value = {"productos": []}
         mock_vendedores.return_value = {"vendedores": []}
 
-        result = procesar_reporte("2024-01-01", "2024-12-31")
-        self.assertEqual(result, [])
+        resultado = procesar_reporte("2024-01-01", "2024-12-31")
+        self.assertEqual(resultado[0]["message"], "No se encontraron ventas en este rango de fechas")
 
     @patch("services.report_logic.obtener_ventas")
     @patch("services.report_logic.obtener_productos")
@@ -78,9 +78,7 @@ class TestProcesarReporte(unittest.TestCase):
         mock_vendedores.return_value = {"vendedores": [{"id": 2, "nombre": "Juan"}]}
 
         result = procesar_reporte("2024-01-01", "2024-12-31")
-        self.assertEqual(result[0]["producto"], 999)
-        self.assertEqual(result[0]["unidades_vendidas"], 1)
-        self.assertEqual(result[0]["ingresos"], 0.0)
+        self.assertEqual(result[0]["message"], "No se encontraron ventas para este producto")
 
     @patch("services.report_logic.obtener_ventas")
     @patch("services.report_logic.obtener_productos")
@@ -273,7 +271,7 @@ class TestProcesarReporte(unittest.TestCase):
         mock_vendedores.return_value = {"vendedores": []}
 
         resultado = procesar_reporte("2024-01-01", "2024-01-31")
-        self.assertEqual(resultado, []) 
+        self.assertEqual(resultado[0]["message"], "No se encontraron ventas en este rango de fechas")
 
     @patch("services.report_logic.obtener_ventas")
     @patch("services.report_logic.obtener_productos")
@@ -284,7 +282,7 @@ class TestProcesarReporte(unittest.TestCase):
         mock_vendedores.return_value = {"vendedores": []}
 
         resultado = procesar_reporte("2024-01-01", "2024-01-31")
-        self.assertEqual(resultado, [])
+        self.assertEqual(resultado[0]["message"], "No se encontraron ventas en este rango de fechas")
 
     @patch("services.report_logic.obtener_ventas")
     @patch("services.report_logic.obtener_productos")
@@ -295,7 +293,7 @@ class TestProcesarReporte(unittest.TestCase):
         mock_vendedores.return_value = None
 
         resultado = procesar_reporte("2024-01-01", "2024-01-31")
-        self.assertEqual(resultado, [])
+        self.assertEqual(resultado[0]["message"], "No se encontraron ventas en este rango de fechas")
 
     @patch("services.report_logic.obtener_ventas")
     @patch("services.report_logic.obtener_productos")

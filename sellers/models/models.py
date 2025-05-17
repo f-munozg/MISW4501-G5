@@ -44,6 +44,15 @@ class Role(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), nullable=False)
 
+class Event(db.Model):
+    __tablename__ = "event"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = Column(String(255), nullable=False)
+    start_date = Column(String(255), nullable=False)
+    end_date = Column(String(255), nullable=False)
+    location = Column(String(255), nullable=False)
+
 class SellerJsonSchema(Schema):
     id = fields.UUID()
     identification_number = fields.Str()

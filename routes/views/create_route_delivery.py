@@ -1,4 +1,4 @@
-import math, os, requests
+import math, os, requests, random
 from datetime import datetime
 from flask_restful import Resource
 from flask import request
@@ -48,7 +48,7 @@ class CreateRouteDelivery(Resource):
             truck_orders = orders[i:limit]
             for order in truck_orders:
                 stop = RouteStop(
-                    eta = 1,
+                    eta = random.randint(0, 25),
                     customer_id = order.get("customer_id"),
                     order_id = order.get("order_id"),
                     route_id = route.id,

@@ -1,4 +1,4 @@
-import os, requests
+import os, requests, random
 from datetime import datetime, timedelta
 from flask_restful import Resource
 from models.models import db, Route, RouteStop, StopStatus, RouteType, RouteStatus
@@ -60,7 +60,7 @@ class CreateRouteSales(Resource):
                 
                 if not visit:
                     stop = RouteStop(
-                        eta = 1,
+                        eta = random.randint(0, 25),
                         customer_id = cust_id,
                         route_id = route.id,
                         status = StopStatus.PENDIENTE,
