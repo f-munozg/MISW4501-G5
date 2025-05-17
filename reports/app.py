@@ -1,6 +1,7 @@
 import uuid, os
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from views.health_check import HealthCheck
 from views.report_sales import ReporteVentas, ReporteVentasCSV, ReporteVentasExcel, ReporteVentasPDF
@@ -9,6 +10,7 @@ import os
 
 def create_app():
     application = Flask(__name__)
+    CORS(application)
 
     add_routes(application)
 

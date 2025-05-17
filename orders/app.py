@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from models.models import db
 from views.health_check import HealthCheck
 from views.create_order import CreateOrder
@@ -21,6 +22,7 @@ import os, uuid
 
 def create_app():
     application = Flask(__name__)
+    CORS(application)
 
     host = os.environ.get('DB_HOST', 'localhost')
     port = os.environ.get('DB_PORT', '9432')
