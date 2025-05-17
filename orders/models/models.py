@@ -115,6 +115,23 @@ class OrderProductsJsonSchema(Schema):
     quantity = fields.Float()
     warehouse_id = fields.UUID()
 
+class ProductJsonSchema(Schema):
+    id = fields.UUID()
+    sku = fields.Str()
+    name = fields.Str()
+    unit_value = fields.Float()
+    storage_conditions = fields.Str()
+    product_features = fields.Str()
+    provider_id = fields.UUID()
+    estimated_delivery_time = fields.DateTime()
+    photo = fields.Str()
+    description = fields.Str()
+    category = fields.Enum(ProductCategory)
+
+class ProductListJsonSchema(Schema):
+    quantity = fields.Float()
+    product = fields.Nested(ProductJsonSchema)
+
 class PaymentSummarySchema(Schema):
     total_amount = fields.Float()
     paid_amount = fields.Float()

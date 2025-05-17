@@ -12,6 +12,7 @@ from views.stock_alert_critical import StockCriticalCheck
 from views.product_rotation import ProductRotationReport
 from views.optimize_purchases import OptimizePurchases
 from views.product_stock import GetProductStock
+from views.purchase_suggestions import PurchaseSuggestions
 from models.models import db
 
 import os, uuid
@@ -51,6 +52,7 @@ def add_routes(application):
     api.add_resource(ProductRotationReport, "/stock/product_rotation")
     api.add_resource(OptimizePurchases, "/stock/optimize_purchases")
     api.add_resource(GetProductStock, "/stock/<product_id>")
+    api.add_resource(PurchaseSuggestions, "/stock/<user_id>/suggestions") # GET
 
 def init_db(app):
     db.init_app(app)
