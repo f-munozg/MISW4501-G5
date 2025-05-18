@@ -247,11 +247,11 @@ class UpdatePQR(Resource):
             return {"message": "Invalid UUID format"}, 400
 
         # Validar seller_id si está presente
-        if "seller_id" in data:
-            try:
-                seller_uuid = uuid.UUID(str(data["seller_id"]))
-            except ValueError:
-                return {"message": "Invalid seller ID format"}, 400
+        # if "seller_id" in data:
+        #     try:
+        #         seller_uuid = uuid.UUID(str(data["seller_id"]))
+        #     except ValueError:
+        #         return {"message": "Invalid seller ID format"}, 400
 
         # Validar status si está presente
         if "status" in data:
@@ -278,8 +278,8 @@ class UpdatePQR(Resource):
             if "status" in data:
                 pqr.status = status
             
-            if "seller_id" in data:
-                pqr.seller_id = seller_uuid
+            # if "seller_id" in data:
+            #     pqr.seller_id = seller_uuid
             
             pqr.amount = round(random.uniform(0.1 * order.order_total, 0.9 * order.order_total), 2)
             

@@ -123,7 +123,7 @@ class StockMovement(Resource):
                 joinedload(HistoryStockLog.warehouse)
             ).order_by(HistoryStockLog.timestamp.desc()).all()
 
-            url_users = os.environ.get("USERS_URL", "http://localhost:5010")
+            url_users = os.environ.get("USERS_URL", "http://localhost:5009")
             url = f"{url_users}/users/get_users_movements"
             headers = {} #"Authorization": self.token}
             response = requests.request("GET", url, headers=headers)

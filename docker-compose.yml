@@ -110,6 +110,8 @@ services:
       APP_PORT: 5000
       ORDERS_URL: http://orders:5000
       SELLERS_URL: http://sellers:5000
+      ROUTES_URL: http://routes:5000
+      SALES_URL: http://sales:5000
       JWT_SECRET_KEY: abe4ab29-5811-4d9e-9b71-3a2dbd7add60
     networks:
       - ccp_net
