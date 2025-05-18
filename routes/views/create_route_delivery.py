@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_restful import Resource
 from flask import request
 from models.models import db, Route, RouteStop, Truck, RouteType, RouteStatus, StopStatus, StopsJsonSchema
+from models.maps import RouteMaps
 
 class CreateRouteDelivery(Resource):
     def post(self):
@@ -78,9 +79,11 @@ class CreateRouteDelivery(Resource):
         db.session.commit()
 
         json_stops = StopsJsonSchema(many=True).dump(stops)
+        map = RouteMaps.deliveryroutes[random.randint(0,len(RouteMaps.deliveryroutes)-1)]
 
         return {
             "message": "route created",
             "id": str(route.id),
-            "stops": json_stops
+            "stops": json_stops,
+            "map": map
         }, 200
