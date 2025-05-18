@@ -4,6 +4,7 @@ env_providers/
 env_products/
 env_reports/
 env_sellers/
+env_routes/
 env_order/
 env_sales/
 env_stock/

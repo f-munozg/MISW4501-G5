@@ -76,5 +76,5 @@ def init_db(app):
 
 if __name__ == "__main__":
     application = create_app()
-    port = int(os.environ.get('APP_PORT', 4002))
+    port = int(os.environ.get('APP_PORT', 5005))  # Puerto 5005 para routes
     application.run(host='0.0.0.0', port=port)

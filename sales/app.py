@@ -41,10 +41,10 @@ def add_routes(application):
     api = Api(application)
     api.add_resource(HealthCheck, "/sales/ping")
     api.add_resource(GetSales, "/sales")
-    api.add_resource(DefinitionSalesPlan, "/sales-plans/add")
+    api.add_resource(DefinitionSalesPlan, "/sales-plans", endpoint="sales_plans")
     api.add_resource(LogVisit, "/sales/log-visit")
 
 if __name__ == "__main__":
     application = create_app()
-    port = int(os.environ.get('APP_PORT', 5000))
+    port = int(os.environ.get('APP_PORT', 5006))
     application.run(host='0.0.0.0', port=port)
