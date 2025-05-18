@@ -145,6 +145,8 @@ class PQRJsonSchema(Schema):
     description = fields.Str()
     status = fields.Method("get_status_value")
     customer_id = fields.UUID()
+    order_id = fields.UUID()
+    amount = fields.Float()
     seller_id = fields.UUID()
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
